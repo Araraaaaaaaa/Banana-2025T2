@@ -1,2 +1,2 @@
-a = print("Como deseja ser chamado?  ")
+a = input("Como deseja ser chamado?  ")
 print(f"Bem-vindo(a) ao Codespaces, {a}")
