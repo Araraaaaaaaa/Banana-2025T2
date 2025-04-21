@@ -1,4 +1,5 @@
 '''https://www.beecrowd.com.br/repository/UOJ_1036.html | Dando resultados positivos'''
+
 import math
 AX2BXC = input()
 valores = AX2BXC.split()
