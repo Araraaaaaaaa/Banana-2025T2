@@ -9,4 +9,8 @@ def aprovado(nota1, nota2):
         return True
     else:    
         return False
-print()
+primeiro, segundo = int(input()), int(input())
+if aprovado(primeiro, segundo) == True:
+    print("Aprovado")
+else:
+    print("Em recuperação")
