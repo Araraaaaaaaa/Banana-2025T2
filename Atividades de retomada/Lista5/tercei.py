@@ -4,8 +4,9 @@ def iniciais(nome)'''
 
 def iniciais(nome):
     palavras = nome.split()
-    iniciais = " "
+    iniciais = ""
     for i in palavras:
-        iniciais = iniciais + " " + i[:1]
+        if i[:1] != "d":
+            iniciais = iniciais + " " + i[:1]
     return iniciais
 print(iniciais(input()))
