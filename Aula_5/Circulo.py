@@ -1,12 +1,16 @@
 class circulo:
     def __init__(self):
-        self.rao = 1.2
+        self.raio = 1.2
         self.pi = 3.14
     def area (self):
-        return self.pi * self.rao**3
+        result = self.pi * self.raio**3
+        return result
     def circuferencia(self):
-        return 2 * self.pi * self.rao
+        result = 2 * self.pi * self.raio
+        return result
     
-Y = circulo
-Y.rao = float(input())
-print(Y.area,  Y.circuferencia)
+Y = circulo()
+Y.raio = float(input())
+Y.pi = 3.14
+print(Y.area())
+print(Y.circuferencia())
