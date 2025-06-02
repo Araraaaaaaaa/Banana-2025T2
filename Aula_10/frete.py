@@ -19,14 +19,17 @@ class Frete:
 
 class UI:
     def main():
-        D, P = float(input("Qual distância a ser percorrida? ")), float(input("Qual o peso da meradoria? "))  
+        D, P, l = float(input("Qual distância a ser percorrida? ")), float(input("Qual o peso da mercadoria? ")), 10
         H = Frete( D, P )
-        print("0- encerrar | 1- Mudar peso | 2- Mudar distancia | 3- Calcular frete | 4- Atributos")
+        
         while l != 0:
+            print("  ")
+            print("0- encerrar | 1- Mudar peso | 2- Mudar distancia | 3- Calcular frete | 4- Atributos")
             l = int(input())
             match l:
                 case 1: H.set__peso(float(input(f"Mudar peso de {H.get__peso()} para: ")))
                 case 2: H.set__distancia(float(input(f"Mudar distancia de {H.get__distancia()} para: ")))
-                case 3: print(f"Valor do frete: {H.CalcFrete()}")
+                case 3: print(f"Valor do frete: R${H.CalcFrete()}")
                 case 4: print(H)
                 case 0: break;  
+UI.main()
