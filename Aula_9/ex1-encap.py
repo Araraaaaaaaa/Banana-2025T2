@@ -23,9 +23,9 @@ class interface:
     @staticmethod
     def main():
         Y = circulo()
-        Y.__raio = float(input())
-        Y.__pi = 3.14
-        print(Y.area())
+        Y.validar_raio ( float(input()) )
+        Y.validar_pi ( 3.14 )
+        print(f"Área do circulo {Y.area())}")
         print(Y.circuferencia())
 
 interface.main()
