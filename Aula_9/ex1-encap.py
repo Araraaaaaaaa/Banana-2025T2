@@ -25,7 +25,7 @@ class interface:
         Y = circulo()
         Y.validar_raio ( float(input()) )
         Y.validar_pi ( 3.14 )
-        print(f"Área do circulo {Y.area())}")
+        print(f"Área do circulo {Y.area()}")
         print(Y.circuferencia())
 
 interface.main()
