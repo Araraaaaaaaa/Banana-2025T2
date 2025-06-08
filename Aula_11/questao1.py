@@ -16,9 +16,11 @@ class Viagem:
     def set__litros ( self , litros):
         if litros <= 0: raise ValueError("Litros Inválido")
         self.__litros = litros
-    def Consumo ( self ): return self.__distancia / self.__litros
+    def Consumo ( self ): 
+        if (self.__distancia / self.__litros) > self.__litros: return f" {(self.__distancia / self.__litros) - self.__litros} litros a mais do que tem no tanque"
+        else: return f"{self.__distancia / self.__litros} do tanque"
 
-    def __str__ ( self ): return f"Viagem - destino = {self.get__destino()} | distancia = {self.get__distancia()} | litros = {self.get__litros()}"
+    def __str__ ( self ): return f"Viagem - destino = {self.get__destino()} | distancia = {self.get__distancia()}KM | litros = {self.get__litros()}L"
 
 class ViagemUI:
     def menu():
@@ -36,7 +38,7 @@ class ViagemUI:
         soft = Viagem(str(input("Seu destino('')-> ")), float(input("A distancia(KM)-> ")), float(input("Gasolina(L)-> ")))
         print("")
         print ( soft )
-        print(f"Consumirá - {soft.Consumo()} litros.")
+        print(f"Consumirá - {soft.Consumo()} ")
         print("")
 User = ViagemUI()
 User.main()
