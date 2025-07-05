@@ -1,47 +1,51 @@
 import random
+
 class Bingo:
-    def __init__( self ):
-        self.sorteados = []
-        self.bolas = []
-    def Iniciar ( self, numBolas ):
-        if len(self.bolas) != 0: self.bolas.clear()
-        if numBolas < 5: raise ValueError("Formato de bingo inválido")
-        else:
-            for boleta in range (1, numBolas+1, 1):
-                self.bolas.append(boleta)
-    def Sortear( self ):
-        if len(self.bolas) == 0: raise ValueError("Jogo não iniciado")
-        if len(self.bolas) == 0: return -1
-        else: 
-            sorte = self.bolas[random.randint(1, len(self.bolas))]
-            self.sorteados.append(sorte)
-            self.bolas.remove(sorte)
-            return sorte
-    def Sorteados( self ): return self.sorteados
+    def __init__(self, num_bolas):
+        self.__num_bolas = num_bolas
+        if num_bolas < 5: raise ValueError("Número mínimo de bolas é 5")
+        self.__bolas = []
 
+    def sortear(self):
+
+        if len(self.__bolas) == self.__num_bolas:
+            return -1
+        x = random.randint(1, self.__num_bolas)
+        while x in self.__bolas:
+            x = random.randint(1, self.__num_bolas)
+        self.__bolas.append(x)
+        return x
+
+    def sorteados(self):
+        return sorted(self.__bolas)
+    
 class BingoUI:
-    gordon = Bingo()
+    @staticmethod
+    def main():
+        op = 0
+        while op != 4:
+            # if op == 0: jogo = BingoUI.iniciar_jogo()
+            op = BingoUI.menu()
+            
+            if op == 1 or op == 0: jogo  = BingoUI.iniciar_jogo()
+            if op == 2: BingoUI.sortear(jogo)
+            if op == 3: BingoUI.sorteados(jogo)
 
-    @classmethod
-    def Main(cls):
-        loop = 9
-        while loop != 0:
-            loop = BingoUI.Menu()
-            match loop:
-                case 1: BingoUI.iniciarJogo()
-                case 2: BingoUI.Sortear()
-                case 3: BingoUI.Sorteados()
-    @classmethod
-    def Menu(cls):
-        print("0-Sair, 1-Iniciar Jogo, 2-Sortear Número, 3-Números Sorteados")
-        return int(input())
-    @classmethod
-    def iniciarJogo(cls): cls.gordon.Iniciar(int(input("Max bolas do bingo: ")))
-    @classmethod
-    def Sortear(cls):
-        print("")
-        print(f"{cls.gordon.Sortear()} acaba de ser sorteado!")
-        print("")
-    @classmethod
-    def Sorteados(cls): print(f"sorteados: {cls.gordon.Sorteados()}")
-BingoUI.Main()
+    @staticmethod
+    def menu():
+        return int(input("1-Iniciar Jogo, 2-Sortear, 3-Sorteados, 4-Fim: "))
+
+    @staticmethod
+    def iniciar_jogo():
+        jogo = Bingo(int(input("Informe o número de bolas: ")))
+        return jogo
+
+    @staticmethod
+    def sortear(jogo):
+        print(jogo.sortear())
+
+    @staticmethod
+    def sorteados(jogo):
+        print(jogo.sorteados())
+
+BingoUI.main()

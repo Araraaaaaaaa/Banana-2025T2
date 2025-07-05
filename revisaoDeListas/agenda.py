@@ -4,10 +4,10 @@ class Contato:
         self.__nome = n
         self.__email = e
         self.__fone = f
-    def get_nome(self):
-        return self.__nome 
     def get_id(self):
-        return self.__id
+        return self.__id    
+    def get_nome(self):
+        return self.__nome    
     def __str__(self):
         return f"{self.__id} - {self.__nome} - {self.__email} - {self.__fone}"
 
@@ -26,41 +26,63 @@ class ContatoUI:
     @classmethod    
     def menu(cls):
         print("1-Inserir, 2-Listar, 3-Atualizar, 4-Excluir, 5-Pesquisar, 6-Fim")
-        return int(input("Escolha uma opção[+]: "))
+        return int(input("Escolha uma opção: "))
     @classmethod    
     def inserir(cls):
-        id = int(input("Informe o id do contato[+]: "))
-        nome = input("Informe o nome[+]: ")
-        email = input("Informe o e-mail[+]: ")
-        fone = input("Informe o fone[+]: ")
+        id = ContatoUI.gerar_id()
+        nome = input("Informe o nome: ")
+        email = input("Informe o e-mail: ")
+        fone = input("Informe o fone: ")
         c = Contato(id, nome, email, fone)
         cls.__contatos.append(c)
-    @classmethod    
+
+    @classmethod   
+    def gerar_id(cls):
+        id = 0
+        if len(cls.__contatos) == 0: return 1
+        for c in cls.__contatos:
+            if c.get_id() > id:
+                id = c.get_id() + 1
+        return id
+    
+    @classmethod 
     def listar(cls):
         #print(cls.__contatos)
+        if len(cls.__contatos) == 0: print("Nenhum contato cadastrado")
         for c in cls.__contatos:
             print(c)
+
+    @classmethod    
+    def listar_id(cls, id):
+        for c in cls.__contatos:
+            if c.get_id() == id: return c
+        return None    
+
     @classmethod    
     def atualizar(cls):
-        id = int(input("ID do contato a ser modificado[+]: "))
-        for c in cls.__contatos:
-            if c.get_id() == id: 
-                cls.__contatos.remove(c)
-                nome = input("Novo nome[+]: ")
-                email = input("Novo e-mail[+]: ")
-                fone = input("Novo fone[+]: ")
-                c = Contato(id, nome, email, fone)
-                cls.__contatos.append(c)
-                break
+        cls.listar()
+        id = int(input("Informe o id do contato a ser atualizado: "))
+        c = cls.listar_id(id)
+        if c == None: print("Contato não encontrado")
+        else:
+            cls.__contatos.remove(c) 
+            nome = input("Informe o novo nome: ")
+            email = input("Informe o novo e-mail: ")
+            fone = input("Informe o novo fone: ")
+            c = Contato(id, nome, email, fone)
+            cls.__contatos.append(c)
+
     @classmethod    
     def excluir(cls):
-        exclu = int(input("Digite o id[-]: "))
-        for c in cls.__contatos:
-            if c.get_id() == exclu: cls.__contatos.remove(c)
-            else: print("ID não encontrado")
+        cls.listar()
+        id = int(input("Informe o id do contato a ser excluído: "))
+        c = cls.listar_id(id)
+        if c == None: print("Contato não encontrado")
+        else: cls.__contatos.remove(c)
+
     @classmethod    
     def pesquisar(cls):
-        nome = input("Informe o nome[!]: ")
+        nome = input("Informe o nome: ")
         for c in cls.__contatos:
             if c.get_nome().startswith(nome): print(c)
 
