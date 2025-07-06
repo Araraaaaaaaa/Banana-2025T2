@@ -24,7 +24,7 @@ class BingoUI:
     def main():
         op = 0
         while op != 4:
-            # if op == 0: jogo = BingoUI.iniciar_jogo()
+            if op == 0: jogo = BingoUI.iniciar_jogo()
             op = BingoUI.menu()
             
             if op == 1 or op == 0: jogo  = BingoUI.iniciar_jogo()
