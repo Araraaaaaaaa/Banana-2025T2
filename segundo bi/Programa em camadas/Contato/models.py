@@ -1,3 +1,4 @@
+#apenas esse vai para a atividade
 from datetime import datetime
 import json
 
@@ -41,46 +42,19 @@ class Contato:
 
     def __str__(self): return f"[{self.__nome}] - ID: {self.__id} - Nascimento: {datetime.strftime(self.__idade, "%d/%m")} - Telefone: {self.__fone} - E-mail: {self.__email}"
 
-class ContatoUI:
+#aqui fica o enum
+
+class ContatoDAO:
     __contatos = []
-    space = ""
 
     @classmethod    
-    def main(cls):
-        op = 0
-        while op != 10:
-            if op == 1: ContatoUI.inserir()
-            if op == 2: ContatoUI.listar()
-            if op == 3: ContatoUI.buscar_id()
-            if op == 4: ContatoUI.pesquisar()
-            if op == 5: ContatoUI.excluir()
-            if op == 6: ContatoUI.atualizar()
-            if op == 7: ContatoUI.aniversariantes()
-            if op == 8: ContatoUI.abrir()
-            if op == 9: ContatoUI.salvar()
-            for k in range(3):
-                print(cls.space)
-            op = ContatoUI.menu()
-            print(cls.space)
-
-    @classmethod    
-    def menu(cls):
-        print("1-Inserir contato | 2-Listar contatos | 3-Buscar id | 4-Buscar nome | 5-Excluir contato | 6-Atualizar contato | 7-Aniversários | 8-Abrir backup | 9-Salvar alterções | 10-Fim")
-        return int(input("Escolha uma opção: "))
-
-    @classmethod    
-    def inserir(cls):
-        id = ContatoUI.gerar_id()
-        nome = input("Informe o nome: ")
-        email = input("Informe o e-mail: ")
-        fone = input("Informe o fone: ")
-        idade = input("Informe a data de nascimento: ")
-        c = Contato(id, nome, email, fone, idade)
+    def inserir(cls, nome, email, fone, idade):
+        c = Contato(ContatoDAO.gerar_id(), nome, email, fone, idade)
         cls.__contatos.append(c)
-        print(f"{c.get_nome()} inserido(a) com sucesso!")
+        return "Inserido com sucesso!"
         
     @classmethod   
-    def gerar_id(cls): #gera id, não printa
+    def gerar_id(cls): #gera id, não printa ou passa a outras classes.
         id = 0
         if len(cls.__contatos) == 0: return 1
         for c in cls.__contatos:
@@ -89,20 +63,21 @@ class ContatoUI:
         return id
     
     @classmethod
-    def buscar_id(cls): #busca alguém pelo id
-        ContatoUI.listar()
-        id, value = int(input("Insira o ID: ")), False
+    def buscar_id(cls, id): #busca alguém pelo id
+        value = False
         for i in cls.__contatos:
             if i.get_id() == id:
                 value, objeto = True, i
-        if value: print(objeto)
-        else: print("ID não encontrado")
+        if value: return objeto
+        else: return "ID não encontrado"
 
     @classmethod 
-    def listar(cls): #mostra todos os contatos
-        if len(cls.__contatos) == 0: print("Nenhum contato cadastrado")
+    def listar(cls): #mostra todos os contatos. retorna list 
+        list = []
+        if len(cls.__contatos) == 0: return "Nenhum contato cadastrado"
         for c in cls.__contatos:
-            print(f"{c.get_nome()}:  {c.get_id()}")
+            list.append(f"{c.get_nome()}:  {c.get_id()}")
+        return list
 
     @classmethod    
     def listar_id(cls, id): #processo de procurar o sujeito, não printa
@@ -112,49 +87,42 @@ class ContatoUI:
         return None    
 
     @classmethod    
-    def atualizar(cls): #modifica um sujeito já criado
-        cls.listar()
-        id = int(input("Informe o id do contato a ser atualizado: "))
+    def atualizar(cls, id, nome, email, fone, idade): #modifica um sujeito já criado
         c = cls.listar_id(id)
-        if c == None: print("Contato não encontrado")
+        if c == None: return "Contato não encontrado" 
         else:
             cls.__contatos.remove(c) 
-            nome = input("Informe o novo nome: ")
-            email = input("Informe o novo e-mail: ")
-            fone = input("Informe o novo fone: ")
-            idade = input("Informe o novo aniversário: ")
             c = Contato(id, nome, email, fone, idade)
             cls.__contatos.append(c)
-            print("Atualizado com sucesso!")
+            return "Atualizado com sucesso!"
             
     @classmethod    
-    def excluir(cls): #exclui um sujeito
+    def excluir(cls, id): #exclui um sujeito
         cls.listar()
-        id = int(input("Informe o id do contato a ser excluído: "))
         c = cls.listar_id(id)
-        if c == None: print("Contato não encontrado")
+        if c == None: return "Contato não encontrado"
         else: 
             cls.__contatos.remove(c)
-            print(f"{id} Removido com sucesso!")
+            return f"{id} Removido com sucesso!"
     
     @classmethod    
-    def pesquisar(cls): #pesquisa alguem a partir do nome
-        nome, pessoa = input("Informe o nome: "), any
+    def pesquisar(cls, nome): #pesquisa alguem a partir do nome
+        pessoa = any
         for c in cls.__contatos:
             if c.get_nome().startswith(nome): pessoa = c
-        if pessoa == any: print("Nome não encontrado")
-        else: print("pessoa")
+        if pessoa == any: return "Nome não encontrado"
+        else: return pessoa
 
     @classmethod
-    def aniversariantes(cls): #quais os aniversariantes do mês
-        mes = int(input("Informe o mês: "))
-        print(f"Aniversariantes do mês de {mes}: ")
+    def aniversariantes(cls, mes): #quais os aniversariantes do mês
+        list = []
         for c in cls.__contatos:
             if c.get_idade().month == mes:        
-                print (f"{c.get_nome()} faz aniversário dia {c.get_idade().day} do mês {c.get_idade().month}")
-
+                list.append(f"{c.get_nome()} faz aniversário dia {c.get_idade().day} do mês {c.get_idade().month}")
+        return list
+    
     @classmethod
-    def abrir(cls): #lê o arquivo
+    def abrir(cls): #lê o arquivo. model
         list = []
         try:
             with open("Contatos.json", mode = "r") as arquivo:
@@ -163,14 +131,11 @@ class ContatoUI:
                     new = Contato(di["id"], di["nome"], di["email"], di["fone"], di["idade"])
                     list.append(new)
             cls.__contatos = list.copy()
-            ContatoUI.listar()
-            print("Backup concluído!")
-        except FileNotFoundError: print("Sem backup")
+            return "Backup concluído!"
+        except FileNotFoundError: return "Sem backup"
 
     @classmethod
-    def salvar(cls): #grava a lista em um arquivo
+    def salvar(cls): #grava a lista em um arquivo. model
         with open("Contatos.json", mode ="w") as arquivo:
             json.dump( cls.__contatos, arquivo, default = Contato.convert)
-        print("Progresso salvo!")
-
-ContatoUI.main()
+        return "Progresso salvo!"
