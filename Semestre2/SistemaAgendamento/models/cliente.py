@@ -14,13 +14,13 @@ class Cliente:
 
     def set_id(self, id): self.__id = id
     def set_nome(self, nome): 
-        if len(nome) < 3: raise ValueError("Nome Inválido")
+        # if len(nome) < 3: raise ValueError("Nome Inválido. Esperado mínimo de 3 letras [XXX]")
         self.__nome = nome
     def set_email(self, email): 
-        if len(email) < 10: raise ValueError("Email Inválido")
+        # if len(email) < 10: raise ValueError("Email Inválido. Esperado [...@email.com]")
         self.__email = email
     def set_fone(self, fone): 
-        if len(fone) != 10 : raise ValueError("Número telefonico Inválido")
+        # if len(fone) != 10 : raise ValueError("Número telefonico Inválido. Esperado [OXXXX-XXXX]")
         self.__fone = fone
 
     def to_json(self):

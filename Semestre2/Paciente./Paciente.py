@@ -10,16 +10,16 @@ class PPaciente:
 
     #______--__- Métodos de alteração e verificação dos atributos
     def set__nome (self, Xnome): 
-        if len(Xnome) < 3: raise ValueError("Nome Inválido")
-        else: self.__nome = Xnome
+        #if len(Xnome) < 3: raise ValueError("Nome Inválido")
+         self.__nome = Xnome
     def set__cpf (self, Xcpf): 
-        if len(Xcpf) != 11 : raise ValueError("CPF Inválido")
-        else: self.__cpf = Xcpf 
+        #if len(Xcpf) != 11 : raise ValueError("CPF Inválido")
+         self.__cpf = Xcpf 
     def set__telefon (self, Xtelefon): 
-        if len(Xtelefon) != 10 : raise ValueError("Número telefonico Inválido")
-        else: self.__telefon = Xtelefon
+        #if len(Xtelefon) != 10 : raise ValueError("Número telefonico Inválido")
+         self.__telefon = Xtelefon
     def set__nascimento (self, Xnascimento): 
-        if datetime.now() > Xnascimento or datetime.now() != Xnascimento: raise ValueError("Data Inválida")
+        #if datetime.now() > Xnascimento or datetime.now() != Xnascimento: raise ValueError("Data Inválida")
         self.__nascimento = Xnascimento
     
     #______--__- Métodos de recuperação dos atributos encapsulados
@@ -34,4 +34,4 @@ class PPaciente:
 
     #______--__- Informes gerais
     def __str__ (self):
-        return f"Paciente: {self.__nome}, CPF: {self.__cpf}, Idade: {datetime.strftime(self.__nascimento)}, Contato: {self.__telefon}"
+        return f"Paciente: {self.__nome}, CPF: {self.__cpf}, Data: {datetime.strftime(self.__nascimento, "d%/m%/Y%")}, Contato: {self.__telefon}"
