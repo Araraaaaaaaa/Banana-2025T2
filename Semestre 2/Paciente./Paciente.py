@@ -10,16 +10,16 @@ class PPaciente:
 
     #______--__- Métodos de alteração e verificação dos atributos
     def set__nome (self, Xnome): 
-        if len(Xnome) < 3: raise ValueError("")
+        if len(Xnome) < 3: raise ValueError("Nome Inválido")
         else: self.__nome = Xnome
     def set__cpf (self, Xcpf): 
-        if len(Xcpf) != 11 : raise ValueError("")
+        if len(Xcpf) != 11 : raise ValueError("CPF Inválido")
         else: self.__cpf = Xcpf 
     def set__telefon (self, Xtelefon): 
-        if len(Xtelefon) != 10 : raise ValueError("")
+        if len(Xtelefon) != 10 : raise ValueError("Número telefonico Inválido")
         else: self.__telefon = Xtelefon
     def set__nascimento (self, Xnascimento): 
-        #procurar como fazer
+        if datetime.now() > Xnascimento or datetime.now() != Xnascimento: raise ValueError("Data Inválida")
         self.__nascimento = Xnascimento
     
     #______--__- Métodos de recuperação dos atributos encapsulados
