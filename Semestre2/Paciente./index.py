@@ -13,7 +13,7 @@ class Paciente:
 
         #______--__- Resposta do sistema
         if st.button("Idade"):
-            objeto = PPaciente(Nome, Cpf, Fone, datetime.strptime(Nascimento, "d%/m%/Y%"))
+            objeto = PPaciente(Nome, Cpf, Fone, datetime.strptime(Nascimento, "%d/%m/%Y"))
             st.write(objeto)
             st.write(objeto.idade())
 Paciente.main()

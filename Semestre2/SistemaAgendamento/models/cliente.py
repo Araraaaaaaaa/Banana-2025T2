@@ -14,23 +14,18 @@ class Cliente:
 
     def set_id(self, id): self.__id = id
     def set_nome(self, nome): 
-        # if len(nome) < 3: raise ValueError("Nome Inválido. Esperado mínimo de 3 letras [XXX]")
         self.__nome = nome
     def set_email(self, email): 
-        # if len(email) < 10: raise ValueError("Email Inválido. Esperado [...@email.com]")
         self.__email = email
     def set_fone(self, fone): 
-        # if len(fone) != 10 : raise ValueError("Número telefonico Inválido. Esperado [OXXXX-XXXX]")
         self.__fone = fone
 
     def to_json(self):
-        dic = {"id":self.__id, "nome":self.__nome,
-        "email":self.__email, "fone":self.__fone}
+        dic = {"id":self.__id, "nome":self.__nome,"email":self.__email, "fone":self.__fone}
         return dic
     @staticmethod
     def from_json(dic):
-        return Cliente(dic["id"], dic["nome"], dic["email"],
-        dic["fone"])
+        return Cliente(dic["id"], dic["nome"], dic["email"], dic["fone"])
     #______--__- Informes gerais
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__email} – {self.__fone}"
 

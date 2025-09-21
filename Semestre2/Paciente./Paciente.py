@@ -30,8 +30,9 @@ class PPaciente:
 
     #______--__- Método que informa a idade do paciente em relação ao agora
     def idade(self): 
-        return f"Paciente: {self.__nome}, Anos: {self.__nascimento.days // 365}, Meses: {self.__nascimento.days % 365 // 30}, Dias: {self.__nascimento.days % 365 % 30},"
+        Time = self.__nascimento - datetime.now()
+        return f"Paciente: {self.__nome}, Anos: {abs(Time.days // 365)}, Meses: {Time.days % 365 // 30}, Dias: {Time.days % 365 % 30},"
 
     #______--__- Informes gerais
     def __str__ (self):
-        return f"Paciente: {self.__nome}, CPF: {self.__cpf}, Data: {datetime.strftime(self.__nascimento, "d%/m%/Y%")}, Contato: {self.__telefon}"
+        return f"Paciente: {self.__nome}, CPF: {self.__cpf}, Data: {datetime.strftime(self.__nascimento, "%d/%m/%Y")}, Contato: {self.__telefon}"
