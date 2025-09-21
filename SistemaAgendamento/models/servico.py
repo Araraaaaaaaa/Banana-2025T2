@@ -1,19 +1,20 @@
 import json
 class Servico:
     def __init__(self, id, d, v):
-        self.set_id (int(id))
-        self.set_descricao (str(d))
-        self.set_valor = (float(v))
+        self.set_id(id)        
+        self.set_descricao(d)
+        self.set_valor(v)
 
     def get_id(self): return self.__id
     def get_descricao(self): return self.__descricao
     def get_valor(self): return self.__valor
+
     def set_id(self, id): self.__id = id
     def set_descricao (self, descricao): self.__descricao = descricao
     def set_valor (self, valor): self.__valor = valor
 
-    def to_json(self): return {"ID": self.__id, "DESCRICAO": self.__descricao, "VALOR": self.__valor}
-    def from_json(dic): return Servico(dic["ID"], dic["DESCRICAO"], dic["VALOR"])
+    def to_json(self): return {"id": self.__id, "descricao": self.__descricao, "valor": self.__valor}
+    def from_json(dic): return Servico(dic["id"], dic["descricao"], dic["valor"])
 
     def __str__(self): return f"ID: {self.__id} - Valor: {self.__valor} - Descrição: {self.__descricao}"
     
@@ -23,10 +24,11 @@ class ServicoDAO:
     @classmethod
     def inserir(cls, obj):
         cls.abrir()
-        id = 0
-        for aux in cls.__coisas:
-            if aux.get_id() > id: id = aux.get_id()
-        obj.set_id(id +1)
+        idd = 0
+        if len(cls.__coisas) != 0:
+            for aux in cls.__coisas:
+                if aux.get_id() > idd: idd = aux.get_id()
+        obj.set_id(idd + 1)
         cls.__coisas.append(obj)
         cls.salvar()
     #.listar
@@ -34,14 +36,12 @@ class ServicoDAO:
     def listar(cls):
         cls.abrir()
         return cls.__coisas
-
     @classmethod
     def listar_id(cls, id):
         cls.abrir()
         for obj in cls.__coisas:
             if obj.get_id() == id: return obj
         return None
-    
     #.atualizar
     @classmethod
     def atualizar(cls, obj):
@@ -50,7 +50,6 @@ class ServicoDAO:
             cls.__coisas.remove(aux)
             cls.__coisas.append(obj)
             cls.salvar()
-
     #.excluir
     @classmethod
     def excluir(cls, obj):
@@ -69,6 +68,7 @@ class ServicoDAO:
                     obj = Servico.from_json(dic)
                     cls.__coisas.append(obj)
         except FileNotFoundError: pass
+
     #.salvar
     @classmethod
     def salvar(cls):
