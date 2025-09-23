@@ -25,15 +25,13 @@ class Horario:
         return {"id":self.__id, "data":self.__data.strftime("%d/%m/%Y %H:%M"), "confirmado":self.__confirmado, "id_cliente":self.__id_cliente,"id_servico":self.__id_servico}
     @staticmethod
     def from_json(dic):
-        horario = Horario(dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y%H:%M"))
+        horario = Horario(dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"))
         horario.set_confirmado(dic["confirmado"])
         horario.set_id_cliente(dic["id_cliente"])
         horario.set_id_servico(dic["id_servico"])
         return horario
 
     def __str__(self): return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')}- {self.__confirmado}"
-
-    
 
 class HorarioDAO:
     __objetos= []
@@ -59,6 +57,7 @@ class HorarioDAO:
         for obj in cls.__objetos:
             if obj.get_id() == id: return obj
         return None
+    
     @classmethod
     def atualizar(cls, obj):
         aux = cls.listar_id(obj.get_id())

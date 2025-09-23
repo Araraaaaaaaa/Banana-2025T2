@@ -14,6 +14,9 @@ class View:
     def cliente_excluir(id):
         cliente = Cliente(id, "", "", "")
         ClienteDAO.excluir(cliente)
+    def cliente_listar_id(id):
+        cliente = ClienteDAO.listar_id(id)
+        return cliente
 
     def servico_listar():
         return ServicoDAO.listar()
@@ -26,6 +29,9 @@ class View:
     def servico_excluir(id):
         servico = Servico(id, "", "")
         ServicoDAO.excluir(servico)
+    def servico_listar_id(id):
+        servico = ServicoDAO.listar_id(id)
+        return servico
 
     def horario_inserir(data, confirmado, id_cliente, id_servico):
         c = Horario(0, data)
@@ -44,3 +50,6 @@ class View:
     def horario_excluir(id):
         c = Horario(id, None)
         HorarioDAO.excluir(c)
+    def horario_listar_id(id):
+        horario = HorarioDAO.listar_id(id)
+        return horario

@@ -29,7 +29,7 @@ class ClienteDAO():
         cls.abrir()
         iddd = 0
         for aux in cls.__objetos:
-            if aux.get_iddd() > id: iddd = aux.get_id()
+            if aux.get_id() > iddd: iddd = aux.get_id()
         obj.set_id(iddd +1)
         cls.__objetos.append(obj)
         cls.salvar()
