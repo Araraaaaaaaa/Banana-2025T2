@@ -26,36 +26,40 @@ class ManterHorarioUI:
                 if cliente != None: cliente = cliente.get_nome()
                 if servico != None: servico = servico.get_descricao()
                 if profissio != None: profissio = profissio.get_nome()
-                dic.append({"id" : obj.get_id(), "data" : obj.get_data(),"confirmado" : obj.get_confirmado(), "cliente" : cliente,"serviço" : servico,"profissional" : profissio})
+                dic.append({"id" : obj.get_id(), "data" : obj.get_data(),"confirmado" : obj.get_confirmado(), "cliente" : cliente,"serviço" : servico, "profissional" : profissio})
             df = pd.DataFrame(dic)
             st.dataframe(df)
 
     def inserir():
         clientes= View.cliente_listar()
         servicos= View.servico_listar()
-        profissio= View.profissional_listar()
-        data= st.text_input("Informe a data e horário do serviço",
-        datetime.now().strftime("%d/%m/%Y %H:%M"))
+        profissionais= View.profissional_listar()
+        data = st.text_input("Informe a data e horário do serviço", datetime.now().strftime("%d/%m/%Y %H:%M"))
         confirmado= st.checkbox("Confirmado")
-        cliente = st.selectbox("Informe o cliente", clientes, index= None)
-        servico = st.selectbox("Informe o serviço", servicos, index= None)
-        profissio = st.selectbox("Informe o profissional", profissio, index= None)
+        cliente = st.selectbox("Informe o cliente", clientes, index=None)
+        servico = st.selectbox("Informe o serviço", servicos, index=None)
+        profissio = st.selectbox("Informe o profissional", profissionais, index=None)
         if st.button("Inserir"):
-            id_cliente = None
-            id_servico = None
-            id_profissio = None
-            if cliente != None: id_cliente = cliente.get_id()
-            if servico != None: id_servico = servico.get_id()
-            if profissio != None: id_profissio = profissio.get_id()
-            View.horario_inserir(datetime.strptime(data, "%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissio)
+            if profissio is None:
+                st.error("Você deve selecionar um profissional")
+                return 
+            if not profissionais:  
+                st.error("Nenhum profissional cadastrado")
+                return
+            id_cliente = cliente.get_id() if cliente else None
+            id_servico = servico.get_id() if servico else None
+            id_profissio = profissio.get_id()
+            View.horario_inserir(
+                datetime.strptime(data, "%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissio)
             st.success("Horário inserido com sucesso")
+
     def atualizar():
         horarios = View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
         else:
             clientes = View.cliente_listar()
             servicos= View.servico_listar()
-            profissio= View.profissional_listar()
+            profissionais = View.profissional_listar()
             op = st.selectbox("Atualização de Horários", horarios)
             data = st.text_input("Informe a nova data e horário do serviço", op.get_data().strftime("%d/%m/%Y %H:%M"))
             confirmado = st.checkbox("Nova confirmação", op.get_confirmado())
@@ -64,8 +68,11 @@ class ManterHorarioUI:
             id_profissio = None if op.get_id_profissional() in [0, None] else op.get_id_profissional()
             cliente = st.selectbox("Informe o novo cliente", clientes, next((i for i, c in enumerate(clientes) if c.get_id() == id_cliente), None))
             servico = st.selectbox("Informe o novo serviço", servicos, next((i for i, s in enumerate(servicos) if s.get_id() == id_servico), None))
-            profissio = st.selectbox("Informe o novo profissional", profissio, next((i for i, d in enumerate(clientes) if d.get_id() == id_profissio), None))
+            profissio = st.selectbox("Informe o novo profissional", profissionais, next((i for i, d in enumerate(profissionais) if d.get_id() == id_profissio), None))
             if st.button("Atualizar"):
+                if not profissionais:  # lista vazia
+                    st.error("Nenhum profissional cadastrado. Cadastre um antes de atualizar horários.")
+                    return
                 id_cliente = None
                 id_servico = None
                 id_profissio = None
