@@ -27,7 +27,13 @@ class View:
         for c in View.cliente_listar():
             if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome()}
         return None
-
+    
+    # fim do email tem que ser "@Profissional"
+    '''def profissional_autenticar(email, senha):
+        for c in View.profissional_listar():
+            if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome()}
+        return None'''
+    
     def cliente_listar():
         return ClienteDAO.listar()
     def cliente_inserir(nome, email, fone, senha):
