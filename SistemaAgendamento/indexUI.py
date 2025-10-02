@@ -27,20 +27,18 @@ class IndexUI:
         op = st.sidebar.selectbox("Menu", ["Meus Dados"]) #verificar no atualizar e inserir se o e-mail é semelhane ao de outro cliente
         if op == "Meus Dados": PerfilClienteUI.main()
 
-    '''def menu_profissional():
+    def menu_profissional():
         op = st.sidebar.selectbox("Menu", ["Meus Dados"], ["Cadastrar horário"])
-        if op == "Meus Dados": PerfilProfissionalUI.main()
-        if op == "Cadastro de Horários": ManterHorarioUI.main()'''
+        #if op == "Meus Dados": PerfilClienteUI.main()
+        #if op == "Cadastro de Horários": ManterHorarioUI.main()
 
     def sidebar():
         if "usuario_id" not in st.session_state:
             IndexUI.menu_visitante()
         else:
             admin = st.session_state["usuario_nome"] == "admin"
-            #profissional = st.session_state["usuario_senha"]
             st.sidebar.write("Bem-vindo(a), " + st.session_state["usuario_nome"])
             if admin: IndexUI.menu_admin()
-            elif 
             else: IndexUI.menu_cliente()
             IndexUI.sair_do_sistema()
 
