@@ -28,10 +28,6 @@ class Cliente:
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__email} – {self.__fone}"
 
 
-#login view- check
-#ajeitar bug de dois emails - k check
-#não pode ter cliente com nome admin - k check
-
 class ClienteDAO():
     __objetos = []
     #ClienteDAO.inserir
