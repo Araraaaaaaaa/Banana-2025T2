@@ -9,6 +9,9 @@ class View:
         for c in View.cliente_listar():
             if c.get_email() == "admin": return
         View.cliente_inserir("admin", "admin", "fone", "1234")
+    def usuario_nunca_admin(testando):
+        admins = ["admin", "admin1"]
+        return testando.lower() in admins
 
     def cliente_autenticar(email, senha):
         for c in View.cliente_listar():

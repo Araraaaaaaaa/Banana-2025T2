@@ -20,18 +20,17 @@ class Cliente:
     def set_senha(self, senha): self.__senha = senha
 
     def to_json(self):
-        dic = {"id":self.__id, "nome":self.__nome, "email":self.__email,"fone":self.__fone, "senha":self.__senha}
-        return dic
+        return {"id":self.__id, "nome":self.__nome, "email":self.__email,"fone":self.__fone, "senha":self.__senha}
+    def to_df(self): return {"nome":self.__nome, "email":self.__email,"fone":self.__fone}
     @staticmethod
     def from_json(dic):
-        return Cliente(dic["id"], dic["nome"], dic["email"], dic["fone"],dic["senha"])    
+        return Cliente(dic["id"], dic["nome"], dic["email"], dic["fone"], dic["senha"])    
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__email} – {self.__fone}"
 
 
-#login view
-#ajeitar bug de dois emails
-#admin não pode mudar o nome próprio
-#não pode ter cliente com nome admin
+#login view- check
+#ajeitar bug de dois emails - k check
+#não pode ter cliente com nome admin - k check
 
 class ClienteDAO():
     __objetos = []

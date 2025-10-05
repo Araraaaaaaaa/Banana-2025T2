@@ -26,7 +26,7 @@ class ManterHorarioUI:
                 if cliente != None: cliente = cliente.get_nome()
                 if servico != None: servico = servico.get_descricao()
                 if profissio != None: profissio = profissio.get_nome()
-                dic.append({"id" : obj.get_id(), "data" : obj.get_data(),"confirmado" : obj.get_confirmado(), "cliente" : cliente,"serviço" : servico, "profissional" : profissio})
+                dic.append({"data" : obj.get_data(),"confirmado" : obj.get_confirmado(), "cliente" : cliente,"serviço" : servico, "profissional" : profissio})
             df = pd.DataFrame(dic)
             st.dataframe(df)
 
@@ -71,8 +71,11 @@ class ManterHorarioUI:
             profissio = st.selectbox("Informe o novo profissional", profissionais, next((i for i, d in enumerate(profissionais) if d.get_id() == id_profissio), None))
             if st.button("Atualizar"):
                 if not profissionais:  # lista vazia
-                    st.error("Nenhum profissional cadastrado. Cadastre um antes de atualizar horários.")
+                    st.error("Nenhum profissional cadastrado")
                     return
+                if profissio is None:
+                    st.error("Você deve selecionar um profissional")
+                    return 
                 id_cliente = None
                 id_servico = None
                 id_profissio = None

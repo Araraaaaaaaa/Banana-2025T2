@@ -11,6 +11,9 @@ class PerfilUI:
         fone = st.text_input("Informe o novo fone", op.get_fone(), key="PerfilUI.cliente.fone")
         senha = st.text_input("Informe a nova senha", op.get_senha(), type="password", key="PerfilUI.cliente.senha")
         if st.button("Atualizar"):
+            if View.email_duplicado_cliente(email):
+                st.error("Conta cliente já existente")
+                return
             id = op.get_id()
             View.cliente_atualizar(id, nome, email, fone, senha)
             st.success("Cliente atualizado com sucesso")
@@ -24,6 +27,9 @@ class PerfilUI:
         email = st.text_input("Novo e-mail", op.get_email(), key="PerfilUI.profissional.email")
         senha = st.text_input("Nova senha", op.get_senha(), type="password", key="PerfilUI.profissional.senha")
         if st.button("Atualizar"):
+            if View.email_duplicado_profissional(email):
+                st.error("Conta profissional já existente")
+                return
             id = op.get_id()
             View.profissional_atualizar(id, nome, especialidade, conselho, email, senha)
             st.success("Profissional atualizado com sucesso")

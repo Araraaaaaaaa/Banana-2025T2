@@ -18,6 +18,9 @@ class AbrirContaUI:
             if View.email_duplicado_cliente(email):
                 st.error("Conta cliente já existente")
                 return
+            if View.usuario_nunca_admin(nome):
+                st.error("Nome inválido")
+                return
             View.cliente_inserir(nome, email, fone, senha)
             st.success("Conta criada com sucesso")
             time.sleep(2)
@@ -31,11 +34,11 @@ class AbrirContaUI:
         email = st.text_input("Informe o e-mail", key="abrirUI_profissional_email")
         senha = st.text_input("Informe a senha", type="password", key="abrirUI_profissional_senha")
         if st.button("Inserir", key="abrircontaUI_profissional_inserir"):
-            if email[-4:] == "PFSN": 
-                st.error("Conta profissional inválida")
-                return
             if View.email_duplicado_profissional(email):
                 st.error("Conta profissional já existente")
+                return
+            if View.usuario_nunca_admin(nome):
+                st.error("Nome inválido")
                 return
             View.profissional_inserir(nome, especialidade, conselho, email, senha)
             st.success("Conta criada com sucesso")

@@ -13,6 +13,7 @@ class Servico:
     def set_descricao (self, descricao): self.__descricao = descricao
     def set_valor (self, valor): self.__valor = valor
 
+    def to_df(self): return {"descricao":self.__descricao, "valor":self.__valor}
     def to_json(self): return {"id": self.__id, "descricao": self.__descricao, "valor": self.__valor}
     def from_json(dic): return Servico(dic["id"], dic["descricao"], dic["valor"])
 

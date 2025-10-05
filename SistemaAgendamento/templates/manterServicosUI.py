@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 from views import View
+#servico já existente, valor positivo não nulo
 
 class ManterServicosUI:
 
@@ -18,7 +19,7 @@ class ManterServicosUI:
         if len(servicos) == 0: st.write("Nenhum serviço cadastrado")
         else:
             list_dic = []
-            for obj in servicos: list_dic.append(obj.to_json())
+            for obj in servicos: list_dic.append(obj.to_df())
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
 
@@ -42,6 +43,7 @@ class ManterServicosUI:
                 id = op.get_id()
                 View.servico_atualizar(id, Descricao, Valor)
                 st.success("Serviço atualizado com sucesso")
+
     def excluir():
         servicos = View.servico_listar()
         if len(servicos) == 0: st.write("Nenhum serviço cadastrado")

@@ -17,7 +17,7 @@ class ManterProfissionalUI:
         if len(profissio) == 0: st.write("Nenhum profissional cadastrado")
         else:
             list_dic = []
-            for obj in profissio: list_dic.append(obj.to_json())
+            for obj in profissio: list_dic.append(obj.to_df())
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
 
@@ -30,6 +30,9 @@ class ManterProfissionalUI:
         if st.button("Inserir"):
             if View.email_duplicado_profissional(email):
                 st.error("Conta profissional já existente")
+                return
+            if View.usuario_nunca_admin(nome):
+                st.error("Nome inválido")
                 return
             View.profissional_inserir(nome, especialidade, conselho, email, senha)
             st.success("Profissional inserido com sucesso")
@@ -49,6 +52,9 @@ class ManterProfissionalUI:
             if st.button("Atualizar"):
                 if View.email_duplicado_profissional(email):
                     st.error("Conta profissional já existente")
+                    return
+                if View.usuario_nunca_admin(nome):
+                    st.error("Nome inválido")
                     return
                 id = op.get_id()
                 View.profissional_atualizar(id, nome, especialidade, conselho, email, senha)

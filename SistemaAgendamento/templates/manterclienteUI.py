@@ -17,7 +17,7 @@ class ManterClienteUI:
         if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
         else:
             list_dic = []
-            for obj in clientes: list_dic.append(obj.to_json()) #colocar de um jeito que ele não importe a senha ou que ela não seja mostrada no dataframe
+            for obj in clientes: list_dic.append(obj.to_df()) #coloca de um jeito que ele não importa a senha ou que ela não seja mostrada no dataframe
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
 
@@ -26,12 +26,12 @@ class ManterClienteUI:
         email = st.text_input("Informe o e-mail")
         fone = st.text_input("Informe o fone")
         senha = st.text_input("Informe a senha", type="password")
-        if st.button("Inserir"):
-            if nome == "admin":
-                st.error("Nome inválido")
-                return
+        if st.button("Inserir"):        
             if View.email_duplicado_cliente(email):
                 st.error("Conta cliente já existente")
+                return
+            if View.usuario_nunca_admin(nome):
+                st.error("Nome inválido")
                 return
             View.cliente_inserir(nome, email, fone, senha)
             st.success("Cliente inserido com sucesso")
@@ -50,8 +50,11 @@ class ManterClienteUI:
             if st.button("Atualizar"):
                 if op.get_nome() == "admin" or op.get_email() == "admin" or op.get_fone() == "fone":
                     st.error("Conta admin não pode ser atualizada")
-                if View.email_duplicado_cliente(email):
+                if View.email_duplicado_cliente(email): #o cliente que quiser atualizar um simples nome precisa trocar o email
                     st.error("Conta cliente já existente")
+                    return
+                if View.usuario_nunca_admin(nome):
+                    st.error("Nome inválido")
                     return
                 id = op.get_id()
                 View.cliente_atualizar(id, nome, email, fone, senha)

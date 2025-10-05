@@ -14,14 +14,12 @@ class LoginUI:
             if p is not None:
                 st.session_state["usuario_id"] = p["id"]
                 st.session_state["usuario_nome"] = p["nome"]
-                st.session_state["usuario_email"] = p["email"]
                 st.session_state["usuario_tipo"] = "profissional"
                 st.rerun()
 
             elif c is not None:
                 st.session_state["usuario_id"] = c["id"]
                 st.session_state["usuario_nome"] = c["nome"]
-                st.session_state["usuario_email"] = c["email"]
                 st.session_state["usuario_tipo"] = "cliente"
                 st.rerun()
 

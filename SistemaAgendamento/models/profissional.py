@@ -23,6 +23,7 @@ class Profissional:
     def set_especialidade(self, espe): self.__especialidade = espe
     def set_conselho(self, conse): self.__conselho = conse
 
+    def to_df(self): return {"nome":self.__nome, "especialidade":self.__especialidade,"conselho":self.__conselho, "email":self.__email}
     def to_json(self): return {"id": self.__id, "nome":self.__nome, "espec":self.__especialidade, "conselho": self.__conselho, "email": self.__email, "senha": self.__senha}
     def from_json(dic): return Profissional(dic["id"], dic["nome"], dic["espec"], dic["conselho"], dic["email"], dic["senha"])
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__especialidade} - {self.__conselho} - {self.__email}"

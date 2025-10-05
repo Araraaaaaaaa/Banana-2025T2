@@ -23,19 +23,18 @@ class IndexUI:
         if op == "Abrir Conta": AbrirContaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"]) #verificar no atualizar e inserir se o e-mail é semelhane ao de outro cliente
+        op = st.sidebar.selectbox("Menu", ["Meus Dados"]) 
         if op == "Meus Dados": PerfilUI.Cliente()
 
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"], ["Cadastrar horário"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Cadastrar horários"])
         if op == "Meus Dados": PerfilUI.Profissional()
-        if op == "Cadastro de Horários": PerfilUI.cadastro_horarios_profissional()
+        if op == "Cadastrar Horários": PerfilUI.cadastro_horarios_profissional()
 
     def sidebar():
         if "usuario_id" not in st.session_state:
             IndexUI.menu_visitante()
         else:
-            #profissional = st.session_state["usuario_email"][-4:] == "PFSN"
             admin = st.session_state["usuario_nome"] == "admin"
             cliente = st.session_state["usuario_tipo"] == "cliente"
             profi = st.session_state["usuario_tipo"] == "profissional"
@@ -55,7 +54,6 @@ class IndexUI:
         if st.sidebar.button("Sair"):
             del st.session_state["usuario_id"]
             del st.session_state["usuario_nome"]
-            del st.session_state["usuario_email"]
             del st.session_state["usuario_tipo"]
             st.rerun()
 
