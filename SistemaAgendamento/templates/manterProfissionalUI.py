@@ -11,6 +11,7 @@ class ManterProfissionalUI:
         with tab2: ManterProfissionalUI.inserir()
         with tab3: ManterProfissionalUI.atualizar()
         with tab4: ManterProfissionalUI.excluir()
+
     def listar():
         profissio = View.profissional_listar()
         if len(profissio) == 0: st.write("Nenhum profissional cadastrado")
@@ -19,15 +20,22 @@ class ManterProfissionalUI:
             for obj in profissio: list_dic.append(obj.to_json())
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
+
     def inserir():
         nome = st.text_input("Informe o nome")
         especialidade = st.text_input("Informe a especialidade")
         conselho = st.text_input("Informe o conselho")
+        email = st.text_input("Informe o e-mail")
+        senha = st.text_input("Informe a senha")
         if st.button("Inserir"):
-            View.profissional_inserir(nome, especialidade, conselho)
+            if View.email_duplicado_profissional(email):
+                st.error("Conta profissional já existente")
+                return
+            View.profissional_inserir(nome, especialidade, conselho, email, senha)
             st.success("Profissional inserido com sucesso")
             time.sleep(2)
             st.rerun()
+
     def atualizar():
         profissio = View.profissional_listar()
         if len(profissio) == 0: st.write("Nenhum profissional cadastrado")
@@ -36,10 +44,16 @@ class ManterProfissionalUI:
             nome = st.text_input("Novo nome", op.get_nome())
             especialidade = st.text_input("Nova especialidade", op.get_especialidade())
             conselho = st.text_input("Novo conselho", op.get_conselho())
+            email = st.text_input("Novo e-mail", op.get_email())
+            senha = st.text_input("Nova senha", op.get_senha(), type="password")
             if st.button("Atualizar"):
+                if View.email_duplicado_profissional(email):
+                    st.error("Conta profissional já existente")
+                    return
                 id = op.get_id()
-                View.profissional_atualizar(id, nome, especialidade, conselho)
+                View.profissional_atualizar(id, nome, especialidade, conselho, email, senha)
                 st.success("Profissional atualizado com sucesso")
+
     def excluir():
         profissio = View.profissional_listar()
         if len(profissio) == 0: st.write("Nenhum profissional cadastrado")

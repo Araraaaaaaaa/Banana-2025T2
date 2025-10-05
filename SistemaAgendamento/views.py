@@ -12,7 +12,7 @@ class View:
 
     def cliente_autenticar(email, senha):
         for c in View.cliente_listar():
-            if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome()}
+            if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome(), "email": c.get_email}
         return None
     def cliente_listar():
         return ClienteDAO.listar()
@@ -28,6 +28,10 @@ class View:
     def cliente_listar_id(id):
         cliente = ClienteDAO.listar_id(id)
         return cliente
+    def email_duplicado_cliente(email):
+        for dup in View.cliente_listar():
+            if dup.get_email() == email: return True
+        return False
 
 
     def profissional_listar():
@@ -44,12 +48,14 @@ class View:
     def profissional_listar_id(id):
         profissio = ProfissionalDAO.listar_id(id)
         return profissio
-    # fim do email tem que ser "PFSN"
-    '''def profissional_autenticar(email, senha):
+    def profissional_autenticar(email, senha):
         for c in View.profissional_listar():
-            if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome()}
-            
-        return None'''
+            if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome(), "email": c.get_email}
+        return None
+    def email_duplicado_profissional(email):
+        for dup in View.profissional_listar():
+            if dup.get_email() == email: return True
+        return False
     
 
     def servico_listar():

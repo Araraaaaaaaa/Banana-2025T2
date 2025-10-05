@@ -27,6 +27,12 @@ class ManterClienteUI:
         fone = st.text_input("Informe o fone")
         senha = st.text_input("Informe a senha", type="password")
         if st.button("Inserir"):
+            if nome == "admin":
+                st.error("Nome inválido")
+                return
+            if View.email_duplicado_cliente(email):
+                st.error("Conta cliente já existente")
+                return
             View.cliente_inserir(nome, email, fone, senha)
             st.success("Cliente inserido com sucesso")
             time.sleep(2)
@@ -42,6 +48,11 @@ class ManterClienteUI:
             fone = st.text_input("Novo fone", op.get_fone())
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
             if st.button("Atualizar"):
+                if op.get_nome() == "admin" or op.get_email() == "admin" or op.get_fone() == "fone":
+                    st.error("Conta admin não pode ser atualizada")
+                if View.email_duplicado_cliente(email):
+                    st.error("Conta cliente já existente")
+                    return
                 id = op.get_id()
                 View.cliente_atualizar(id, nome, email, fone, senha)
                 st.success("Cliente atualizado com sucesso")
@@ -52,6 +63,8 @@ class ManterClienteUI:
         else:
             op = st.selectbox("Exclusão de Clientes", clientes)
             if st.button("Excluir"): 
+                if op.get_nome() == "admin":
+                    st.error("Conta admin não pode ser excluída")
                 id = op.get_id()
                 View.cliente_excluir(id)
                 st.success("Cliente excluído com sucesso")
