@@ -11,9 +11,10 @@ class PerfilUI:
         fone = st.text_input("Informe o novo fone", op.get_fone(), key="PerfilUI.cliente.fone")
         senha = st.text_input("Informe a nova senha", op.get_senha(), type="password", key="PerfilUI.cliente.senha")
         if st.button("Atualizar", key="perfilUI_cliente_atualizar"):
-            if View.email_duplicado_cliente(email):
-                st.error("Conta cliente já existente")
-                return
+            if not op.get_email() == email: # se o email foi alterado
+                if View.email_duplicado_cliente(email):
+                    st.error("Conta cliente já existente")
+                    return
             id = op.get_id()
             View.cliente_atualizar(id, nome, email, fone, senha)
             st.success("Cliente atualizado com sucesso")
