@@ -48,11 +48,13 @@ class ManterClienteUI:
             fone = st.text_input("Novo fone", op.get_fone())
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
             if st.button("Atualizar"):
-                if op.get_nome() == "admin" or op.get_email() == "admin" or op.get_fone() == "fone":
+                if op.get_nome() == "admin" and op.get_email() == "admin" and op.get_fone() == "fone" and op.get_senha() == "1234":
                     st.error("Conta admin não pode ser atualizada")
-                if View.email_duplicado_cliente(email): #o cliente que quiser atualizar um simples nome precisa trocar o email
-                    st.error("Conta cliente já existente")
                     return
+                if not op.get_email() == email: # se o email foi alterado
+                    if View.email_duplicado_cliente(email): #o cliente que quiser atualizar um simples nome precisa trocar o email
+                        st.error("Conta cliente já existente")
+                        return
                 if View.usuario_nunca_admin(nome):
                     st.error("Nome inválido")
                     return

@@ -50,9 +50,10 @@ class ManterProfissionalUI:
             email = st.text_input("Novo e-mail", op.get_email())
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
             if st.button("Atualizar"):
-                if View.email_duplicado_profissional(email):
-                    st.error("Conta profissional já existente")
-                    return
+                if not op.get_email() == email: # se o email foi alterado
+                    if View.email_duplicado_profissional(email):
+                        st.error("Conta profissional já existente")
+                        return
                 if View.usuario_nunca_admin(nome):
                     st.error("Nome inválido")
                     return
