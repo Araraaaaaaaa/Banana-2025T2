@@ -2,6 +2,7 @@ from templates.manterclienteUI import ManterClienteUI
 from templates.manterServicosUI import ManterServicosUI
 from templates.manterhorarioUI import ManterHorarioUI
 from templates.manterProfissionalUI import ManterProfissionalUI
+from templates.agendarservicoUI import AgendarServicoUI
 from templates.abrircontaUI import AbrirContaUI
 from templates.loginUI import LoginUI
 from templates.perfilUI import PerfilUI
@@ -23,13 +24,17 @@ class IndexUI:
         if op == "Abrir Conta": AbrirContaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"]) 
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviços", "Visualizar Serviços"]) 
         if op == "Meus Dados": PerfilUI.Cliente()
+        if op == "Agendar Serviços": AgendarServicoUI.main()
+        if op == "Visualizar Serviços": AgendarServicoUI.visualizar()
 
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Cadastrar horários"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Agenda", "Visualizar Agenda", "Confirmar Serviços"])
         if op == "Meus Dados": PerfilUI.Profissional()
-        if op == "Cadastrar Horários": PerfilUI.cadastro_horarios_profissional()
+        if op == "Abrir Agenda": PerfilUI.abriragenda_profissional()
+        if op == "Visualizar Agenda": PerfilUI.visualizaragenda_profissional()
+        if op == "Confirmar Serviços": PerfilUI.confirmarservico_profissional()
 
     def sidebar():
         if "usuario_id" not in st.session_state:

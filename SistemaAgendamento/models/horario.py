@@ -23,7 +23,9 @@ class Horario:
     def set_id_cliente(self, id_cliente): self.__id_cliente = id_cliente
     def set_id_servico(self, id_servico): self.__id_servico = id_servico
     def set_id_profissional(self, id_profissional): self.__id_profissional = id_profissional
-    
+
+    def to_df(self):
+        return {"data":self.__data, "confirmado":self.__confirmado}
     def to_json(self):
         return {"id":self.__id, "data":self.__data.strftime("%d/%m/%Y %H:%M"), "confirmado":self.__confirmado, "id_cliente":self.__id_cliente,"id_servico":self.__id_servico, "id_profissional": self.__id_profissional}
     @staticmethod
@@ -35,7 +37,7 @@ class Horario:
         horario.set_id_profissional(dic["id_profissional"])
         return horario
 
-    def __str__(self): return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')}- {self.__confirmado}"
+    def __str__(self): return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - {self.__confirmado}"
 
 class HorarioDAO:
     __objetos= []
@@ -62,6 +64,26 @@ class HorarioDAO:
             if obj.get_id() == id: return obj
         return None
     
+    @classmethod
+    def listar_id_profissional(cls, id):
+        cls.abrir()
+        lista = []
+        for obj in cls.__objetos:
+            if obj.get_id_profissional() == id:
+                lista.append(obj)
+        if lista: return lista
+        else: return None
+
+    @classmethod
+    def listar_id_cliente(cls, id):
+        cls.abrir()
+        lista = []
+        for obj in cls.__objetos:
+            if obj.get_id_cliente() == id:
+                lista.append(obj)
+        if lista: return lista
+        else: return None
+
     @classmethod
     def atualizar(cls, obj):
         aux = cls.listar_id(obj.get_id())
