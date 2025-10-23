@@ -40,49 +40,53 @@ class PerfilUI:
             time.sleep(2)
             st.rerun()
 
-    def abriragenda_profissional(): #não esta criando os vários horários
+    def abriragenda_profissional(): 
         st.header("Abrir Minha Agenda")
         data = st.text_input("Informe a data no formato dd/mm/aaaa", datetime.now().strftime("%d/%m/%Y"))
         horarioI = st.text_input("Informe o horário inicial no formato HH:MM")
         horarioF = st.text_input("Informe o horário final no formato HH:MM")
         intervalo = st.text_input("Informe o intervalo entre os horários (min)", "30")
         if st.button("Abrir Agenda", key="perfilUI_profissional_abriragenda"):
-            #assegurar que não mostre horários antigos e não pode abrir agenda p/ horarios no passado.
             '''datetime.strptime(horarioF, "%H:%M") == datetime.now() or datetime.strptime(horarioI, "%H:%M") < datetime.now() or'''
             horarioI = datetime.strptime(horarioI, "%H:%M")
             horarioF = datetime.strptime(horarioF, "%H:%M")
-            if horarioF < horarioI:
-                st.error("Horário inválido")
-                return
             data = datetime.strptime(data, "%d/%m/%Y")
-            for i in range(200):
-                variante = horarioI + timedelta(i * int(intervalo))
-                if variante > horarioF: break
+            if horarioF < horarioI: #horario final menor que horario inicial
+                st.error("Horário final inválido 1")
+                return
+            if datetime.combine(data.date(), horarioF.time()) < datetime.now():#horario final no passado
+                st.error("Horário final inválido 2")
+            for i in range(200): #esta criando os vários horários
+                variante = horarioI + timedelta(minutes= (i * int(intervalo)))
+                if variante >= horarioF: break
                 View.horario_inserir(datetime.combine(data.date(), variante.time()), False, None, None, st.session_state["usuario_id"])
+            View.horario_ministrar()
             st.success("Horário(s) inserido(s) com sucesso!")
             time.sleep(2)
             st.rerun()
 
-    def visualizaragenda_profissional(): #não está mostrando todos os horários
+    def visualizaragenda_profissional():
         st.header("Visualizar Agenda")
         horarios = View.horario_listar_id_profissional(st.session_state["usuario_id"]) #esse id tem acesso a informações do profissional.json
         if horarios == None: st.write("Nenhum horário cadastrado")
         else:
             list_dic = []
-            for obj in horarios: list_dic.append(obj.to_df()) #coloca de um jeito que ele não importa a senha ou que ela não seja mostrada no dataframe
+            for obj in horarios: list_dic.append(obj.to_df()) #coloca de um jeito que a senha não seja mostrada no dataframe
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
+            View.horario_ministrar() #retira horários antigos
+            st.rerun()
 
-    def confirmarservico_profissional(): #mostrando horarios antigos
+
+    def confirmarservico_profissional(): 
         st.header("Visualizar Agenda")
-        horarios = View.horario_listar()
+        horarios = View.horario_listar_id_profissional(st.session_state["usuario_id"]) #confirma apenas os horários dele
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
         else:
             op = st.selectbox("Informe o Horário", horarios) #str(horarios)
-            if st.button("Corfirmar"):
+            if st.button("Corfirmar", key="confirmarservico_profissional_button_confirmar"):
                 View.horario_atualizar(op.get_id(), op.get_data(), True, op.get_id_cliente(), op.get_id_servico(), op.get_id_profissional())
+                View.horario_ministrar() #retira horários antigos
                 st.success("Horário confirmado com sucesso")
                 time.sleep(2)
                 st.rerun()
-                '''Cliente = View.cliente_listar_id (op.get_id_cliente())#lembrando que um profissional n pode ter dois clientes para o mesmo horário
-            st.write(f"Cliente")'''

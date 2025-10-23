@@ -103,6 +103,11 @@ class View:
     def horario_excluir(id):
         c = Horario(id, None)
         HorarioDAO.excluir(c)
+    def horario_ministrar():
+        HORARIOS = View.horario_listar()
+        for Hora in HORARIOS:
+            if Hora.get_data() < datetime.now():
+                View.horario_excluir(Hora.get_id())
     def horario_listar_id(id):
         horario = HorarioDAO.listar_id(id)
         return horario

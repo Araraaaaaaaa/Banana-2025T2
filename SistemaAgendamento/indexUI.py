@@ -6,6 +6,7 @@ from templates.agendarservicoUI import AgendarServicoUI
 from templates.abrircontaUI import AbrirContaUI
 from templates.loginUI import LoginUI
 from templates.perfilUI import PerfilUI
+from templates.visualizaragendaUI import VisualizarAgendaUI
 from views import View
 import streamlit as st
 
@@ -33,11 +34,13 @@ class IndexUI:
         op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Agenda", "Visualizar Agenda", "Confirmar Serviços"])
         if op == "Meus Dados": PerfilUI.Profissional()
         if op == "Abrir Agenda": PerfilUI.abriragenda_profissional()
-        if op == "Visualizar Agenda": PerfilUI.visualizaragenda_profissional()
+        if op == "Visualizar Agenda": VisualizarAgendaUI.visualizaragenda_profissional()
         if op == "Confirmar Serviços": PerfilUI.confirmarservico_profissional()
 
     def sidebar():
         if "usuario_id" not in st.session_state:
+            st.write(st.session_state)
+            print("OK")
             IndexUI.menu_visitante()
         else:
             admin = st.session_state["usuario_nome"] == "admin"

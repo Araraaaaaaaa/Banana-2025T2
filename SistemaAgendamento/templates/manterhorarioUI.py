@@ -14,6 +14,7 @@ class ManterHorarioUI:
         with tab4: ManterHorarioUI.excluir()
 
     def listar():
+        View.horario_ministrar()
         horarios = View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
 
@@ -54,6 +55,7 @@ class ManterHorarioUI:
             st.success("Horário inserido com sucesso")
 
     def atualizar():
+        View.horario_ministrar()
         horarios = View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
         else:
@@ -84,6 +86,7 @@ class ManterHorarioUI:
                 if profissio != None: id_profissio = profissio.get_id()
                 View.horario_atualizar(op.get_id(), datetime.strptime(data,"%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissio)
                 st.success("Horário atualizado com sucesso")
+                st.rerun()
     def excluir():
         horarios= View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
