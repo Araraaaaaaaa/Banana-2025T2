@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
-from views import View
 import time
 from datetime import datetime
+from views import View
 
+'''____________________________________________________________________________________________________'''
 class ManterHorarioUI:
     def main():
-        st.header("Cadastro de Horários")
+        st.title("Cadastro de Horários")
         tab1, tab2, tab3, tab4 = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
         with tab1: ManterHorarioUI.listar()
         with tab2: ManterHorarioUI.inserir()
@@ -14,7 +15,6 @@ class ManterHorarioUI:
         with tab4: ManterHorarioUI.excluir()
 
     def listar():
-        View.horario_ministrar()
         horarios = View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
 
@@ -55,7 +55,6 @@ class ManterHorarioUI:
             st.success("Horário inserido com sucesso")
 
     def atualizar():
-        View.horario_ministrar()
         horarios = View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
         else:
@@ -87,11 +86,12 @@ class ManterHorarioUI:
                 View.horario_atualizar(op.get_id(), datetime.strptime(data,"%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissio)
                 st.success("Horário atualizado com sucesso")
                 st.rerun()
+
     def excluir():
-        horarios= View.horario_listar()
+        horarios = View.horario_listar()
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
         else:
-            op= st.selectbox("Exclusão de Horários", horarios)
+            op = st.selectbox("Exclusão de Horários", horarios)
             if st.button("Excluir"):
                 View.horario_excluir(op.get_id())
                 st.success("Horário excluído com sucesso")

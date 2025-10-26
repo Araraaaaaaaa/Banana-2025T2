@@ -90,6 +90,7 @@ class View:
         c.set_id_profissional(id_profissio)
         HorarioDAO.inserir(c)
     def horario_listar():
+        View.horario_ministrar()
         r = HorarioDAO.listar()
         r.sort(key = lambda obj : obj.get_data())
         return r
@@ -104,20 +105,25 @@ class View:
         c = Horario(id, None)
         HorarioDAO.excluir(c)
     def horario_ministrar():
-        HORARIOS = View.horario_listar()
-        for Hora in HORARIOS:
-            if Hora.get_data() < datetime.now():
-                View.horario_excluir(Hora.get_id())
+        HORARIOS = HorarioDAO.listar() #confirma a lista
+        if len(HORARIOS) != 0:
+            for Hora in HORARIOS:
+                if Hora.get_data() < datetime.now():
+                    View.horario_excluir(Hora.get_id()) #exclui os antigos
     def horario_listar_id(id):
+        View.horario_ministrar()
         horario = HorarioDAO.listar_id(id)
         return horario
     def horario_listar_id_cliente(id):
+        View.horario_ministrar()
         horario = HorarioDAO.listar_id_cliente(id)
         return horario
     def horario_listar_id_profissional(id):
+        View.horario_ministrar()
         horario = HorarioDAO.listar_id_profissional(id)
         return horario
     def horario_agendar_horario(id_profissional):
+        View.horario_ministrar()
         r = []
         agora = datetime.now()
         for h in View.horario_listar():

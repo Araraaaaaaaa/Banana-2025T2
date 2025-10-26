@@ -2,10 +2,11 @@ import streamlit as st
 import pandas as pd
 import time
 from views import View
-
+#fazer com que o admin possa atualizar a sua senha. verificar o criador automático de admin, talvez ela atrapalhe.
+'''____________________________________________________________________________________________________'''
 class ManterClienteUI:
     def main():
-        st.header("Cadastro de Clientes")
+        st.title("Cadastro de Clientes")
         tab1, tab2, tab3, tab4 = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
         with tab1: ManterClienteUI.listar()
         with tab2: ManterClienteUI.inserir()

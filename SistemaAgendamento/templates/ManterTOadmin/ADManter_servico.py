@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import time
 from views import View
-#servico já existente, valor positivo não nulo
 
-class ManterServicosUI:
+'''____________________________________________________________________________________________________'''
+class ManterServicosUI:#servico já existente, valor positivo não nulo
 
     def main():
-        st.header("Cadastro de Serviços")
+        st.title("Cadastro de Serviços")
         tab1, tab2, tab3, tab4 = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
         with tab1: ManterServicosUI.listar()
         with tab2: ManterServicosUI.inserir()

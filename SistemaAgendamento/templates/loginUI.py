@@ -3,7 +3,7 @@ from views import View
 
 class LoginUI:
     def main():
-        st.header("Entrar no Sistema")
+        st.title("Entrar no Sistema")
         email = st.text_input("Informe o e-mail")
         senha = st.text_input("Informe a senha", type="password")
 

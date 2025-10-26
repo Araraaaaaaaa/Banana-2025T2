@@ -71,8 +71,7 @@ class HorarioDAO:
         for obj in cls.__objetos:
             if obj.get_id_profissional() == id:
                 lista.append(obj)
-        if lista: return lista
-        else: return None
+        return lista
 
     @classmethod
     def listar_id_cliente(cls, id):
@@ -81,8 +80,7 @@ class HorarioDAO:
         for obj in cls.__objetos:
             if obj.get_id_cliente() == id:
                 lista.append(obj)
-        if lista: return lista
-        else: return None
+        return lista
 
     @classmethod
     def atualizar(cls, obj):
@@ -98,6 +96,7 @@ class HorarioDAO:
         if aux != None:
             cls.__objetos.remove(aux)
             cls.salvar()
+
     @classmethod
     def abrir(cls):
         cls.__objetos = []
@@ -108,6 +107,7 @@ class HorarioDAO:
                     obj = Horario.from_json(dic)
                     cls.__objetos.append(obj)
         except FileNotFoundError: pass
+        
     @classmethod
     def salvar(cls):
         with open("horarios.json", mode="w") as arquivo:

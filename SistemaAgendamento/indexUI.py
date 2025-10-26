@@ -1,12 +1,15 @@
-from templates.manterclienteUI import ManterClienteUI
-from templates.manterServicosUI import ManterServicosUI
-from templates.manterhorarioUI import ManterHorarioUI
-from templates.manterProfissionalUI import ManterProfissionalUI
-from templates.agendarservicoUI import AgendarServicoUI
-from templates.abrircontaUI import AbrirContaUI
+#Ações do administrador
+from templates.ManterTOadmin.ADManter_cliente import ManterClienteUI
+from templates.ManterTOadmin.ADManter_profissional import ManterProfissionalUI
+from templates.ManterTOadmin.ADManter_horario import ManterHorarioUI
+from templates.ManterTOadmin.ADManter_servico import ManterServicosUI
+#Ações do profissional
+from templates.ManterTOpfsn.perfilUI import ProfissionalUI
+#Ações do cliente
+from templates.ManterTOclient.abrircontaUI import AbrirContaUI
+from templates.ManterTOclient.perfilUI import ClienteUI
+#Geral
 from templates.loginUI import LoginUI
-from templates.perfilUI import PerfilUI
-from templates.visualizaragendaUI import VisualizarAgendaUI
 from views import View
 import streamlit as st
 
@@ -25,22 +28,17 @@ class IndexUI:
         if op == "Abrir Conta": AbrirContaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviços", "Visualizar Serviços"]) 
-        if op == "Meus Dados": PerfilUI.Cliente()
-        if op == "Agendar Serviços": AgendarServicoUI.main()
-        if op == "Visualizar Serviços": AgendarServicoUI.visualizar()
+        op = st.sidebar.selectbox("Menu", ["Meus Dados"]) 
+        if op == "Meus Dados": ClienteUI.main()
 
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Agenda", "Visualizar Agenda", "Confirmar Serviços"])
-        if op == "Meus Dados": PerfilUI.Profissional()
-        if op == "Abrir Agenda": PerfilUI.abriragenda_profissional()
-        if op == "Visualizar Agenda": VisualizarAgendaUI.visualizaragenda_profissional()
-        if op == "Confirmar Serviços": PerfilUI.confirmarservico_profissional()
+        op = st.sidebar.selectbox("Menu", ["Meus Dados"])
+        if op == "Meus Dados": ProfissionalUI.main()
 
     def sidebar():
         if "usuario_id" not in st.session_state:
-            st.write(st.session_state)
-            print("OK")
+            #st.write(st.session_state)
+            #print("OK")
             IndexUI.menu_visitante()
         else:
             admin = st.session_state["usuario_nome"] == "admin"
@@ -58,7 +56,7 @@ class IndexUI:
         View.cliente_criar_admin() # verifica se existe o usuário admin
         IndexUI.sidebar() # monta o sidebar
     
-    def sair_do_sistema():
+    def sair_do_sistema(): #não está sendo mostrado no perfil cliente
         if st.sidebar.button("Sair"):
             del st.session_state["usuario_id"]
             del st.session_state["usuario_nome"]
