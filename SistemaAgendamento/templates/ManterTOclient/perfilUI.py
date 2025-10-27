@@ -5,7 +5,7 @@ import time
 
 class ClienteUI:
     def main():
-        st.title("Cliente")
+        st.title("Painel Cliente")
         tab1, tab2, tab3 = st.tabs(["Perfil", "Agendar Serviço", "Ver Serviços"])
         with tab1: ClienteUI.perfil()
         with tab2: ClienteUI.agendar()
@@ -22,6 +22,9 @@ class ClienteUI:
                 if View.email_duplicado_cliente(email):
                     st.error("Conta cliente já existente")
                     return
+                if View.usuario_nunca_admin(nome):
+                    st.error("Nome inválido")
+                    return
             id = op.get_id()
             View.cliente_atualizar(id, nome, email, fone, senha)
             st.success("Cliente atualizado com sucesso")
@@ -34,14 +37,16 @@ class ClienteUI:
             horarios = View.horario_agendar_horario(profissional.get_id())
             if len(horarios) == 0: st.write("Nenhum horário disponível")
             else:
-                horario = st.selectbox("Informe o horário", horarios)
                 servicos = View.servico_listar()
-                servico = st.selectbox("Informe o serviço", servicos)
-                if st.button("Agendar"):
-                    View.horario_atualizar(horario.get_id(), horario.get_data(), False, st.session_state["usuario_id"],servico.get_id(), profissional.get_id())
-                    st.success("Horário agendado com sucesso")
-                    time.sleep(2)
-                    st.rerun()
+                if len(servicos) == 0: st.write("Nenhum serviço disponível")
+                else:
+                    horario = st.selectbox("Informe o horário", horarios)
+                    servico = st.selectbox("Informe o serviço", servicos)
+                    if st.button("Agendar"):
+                        View.horario_atualizar(horario.get_id(), horario.get_data(), False, st.session_state["usuario_id"],servico.get_id(), profissional.get_id())
+                        st.success("Horário agendado com sucesso")
+                        time.sleep(2)
+                        st.rerun()
     
     def visualizar():
         horar = View.horario_listar_id_cliente(st.session_state["usuario_id"]) #tem o id do usuário envolvido

@@ -6,7 +6,7 @@ import time
 
 class ProfissionalUI:
     def main():
-        st.title("Profissional")
+        st.title("Painel Profissional")
         tab1, tab2, tab3, tab4 = st.tabs(["Perfil", "Abrir Agenda", "Ver Serviços", "Confirmar Serviço"])
         with tab1: ProfissionalUI.perfil()
         with tab2: ProfissionalUI.abrir()
@@ -25,6 +25,12 @@ class ProfissionalUI:
                 if View.email_duplicado_profissional(email):
                     st.error("Conta profissional já existente")
                     return
+                if View.usuario_nunca_admin(email):
+                    st.error("Email inválido")
+                    return
+                if View.usuario_nunca_admin(nome):
+                    st.error("Nome inválido")
+                    return
             id = op.get_id()
             View.profissional_atualizar(id, nome, especialidade, conselho, email, senha)
             st.success("Profissional atualizado com sucesso")
@@ -32,6 +38,7 @@ class ProfissionalUI:
             st.rerun()
 
     def abrir(): #Visão do profissional
+        se = 0
         data = st.text_input("Informe a data no formato dd/mm/aaaa", datetime.now().strftime("%d/%m/%Y"))
         horarioI = st.text_input("Informe o horário inicial no formato HH:MM")
         horarioF = st.text_input("Informe o horário final no formato HH:MM")
@@ -41,17 +48,26 @@ class ProfissionalUI:
             horarioF = datetime.strptime(horarioF, "%H:%M")
             data = datetime.strptime(data, "%d/%m/%Y")
             if horarioF < horarioI: #horario final menor que horario inicial
-                st.error("Horário final inválido 1")
+                st.error("Horário final inválido¹")
                 return
             if datetime.combine(data.date(), horarioF.time()) < datetime.now():#horario final no passado
-                st.error("Horário final inválido 2")
+                st.error("Horário final inválido²")
+                return
             for i in range(200): #esta criando os vários horários
                 variante = horarioI + timedelta(minutes= (i * int(intervalo)))
                 if variante >= horarioF: break
-                View.horario_inserir(datetime.combine(data.date(), variante.time()), False, None, None, st.session_state["usuario_id"])
-            st.success("Horário(s) inserido(s) com sucesso!")
-            time.sleep(2)
-            st.rerun()
+                tutti = datetime.combine(data.date(), variante.time())
+                if tutti in View.horario_listar_id_profissional(st.session_state["usuario_id"]): pass #não pode haver horarios duplicados para um mesmo profissional
+                else:
+                    View.horario_inserir(tutti, False, None, None, st.session_state["usuario_id"])
+                    se += 1
+            if se != 0:
+                st.success("Horário(s) inserido(s) com sucesso!")
+                time.sleep(2)
+                st.rerun()
+            else:
+                st.error("Agenda já existente")
+                return
 
     def visualizar():
         horarios = View.horario_listar_id_profissional(st.session_state["usuario_id"]) #esse id tem acesso a informações do profissional.json

@@ -35,6 +35,9 @@ class ManterProfissionalUI:
             if View.usuario_nunca_admin(nome):
                 st.error("Nome inválido")
                 return
+            if View.usuario_nunca_admin(email):
+                st.error("Email inválido")
+                return
             View.profissional_inserir(nome, especialidade, conselho, email, senha)
             st.success("Profissional inserido com sucesso")
             time.sleep(2)
@@ -55,6 +58,9 @@ class ManterProfissionalUI:
                     if View.email_duplicado_profissional(email):
                         st.error("Conta profissional já existente")
                         return
+                    if View.usuario_nunca_admin(email):
+                        st.error("Email inválido")
+                        return
                 if View.usuario_nunca_admin(nome):
                     st.error("Nome inválido")
                     return
@@ -68,6 +74,9 @@ class ManterProfissionalUI:
         else:
             op = st.selectbox("Exclusão de profissionais", profissio)
             if st.button("Excluir"): 
+                if len(View.horario_listar_id_profissional(op.get_id())) != 0:
+                    st.error("Profissional com agendamento")
+                    return
                 id = op.get_id()
                 View.profissional_excluir(id)
                 st.success("Profissional excluído com sucesso")

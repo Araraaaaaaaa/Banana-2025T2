@@ -56,7 +56,7 @@ class IndexUI:
         View.cliente_criar_admin() # verifica se existe o usuário admin
         IndexUI.sidebar() # monta o sidebar
     
-    def sair_do_sistema(): #não está sendo mostrado no perfil cliente
+    def sair_do_sistema():
         if st.sidebar.button("Sair"):
             del st.session_state["usuario_id"]
             del st.session_state["usuario_nome"]

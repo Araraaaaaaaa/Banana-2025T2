@@ -16,6 +16,9 @@ class AbrirContaUI:
             if View.usuario_nunca_admin(nome):
                 st.error("Nome inválido")
                 return
+            if View.usuario_nunca_admin(email): #precaução
+                st.error("Email inválido")
+                return
             View.cliente_inserir(nome, email, fone, senha)
             st.success("Conta criada com sucesso")
             time.sleep(2)

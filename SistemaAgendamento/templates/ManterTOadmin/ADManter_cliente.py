@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 from views import View
-#fazer com que o admin possa atualizar a sua senha. verificar o criador automático de admin, talvez ela atrapalhe.
+
 '''____________________________________________________________________________________________________'''
 class ManterClienteUI:
     def main():
@@ -31,9 +31,10 @@ class ManterClienteUI:
             if View.email_duplicado_cliente(email):
                 st.error("Conta cliente já existente")
                 return
-            if View.usuario_nunca_admin(nome):
-                st.error("Nome inválido")
-                return
+            if email != "admin":
+                if View.usuario_nunca_admin(nome):#precaução
+                    st.error("Nome inválido")
+                    return
             View.cliente_inserir(nome, email, fone, senha)
             st.success("Cliente inserido com sucesso")
             time.sleep(2)
@@ -44,21 +45,25 @@ class ManterClienteUI:
         if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
         else:
             op = st.selectbox("Atualização de Clientes", clientes)
-            nome = st.text_input("Novo nome", op.get_nome())
-            email = st.text_input("Novo e-mail", op.get_email())
-            fone = st.text_input("Novo fone", op.get_fone())
-            senha = st.text_input("Nova senha", op.get_senha(), type="password")
+            if op.get_nome() == "admin":
+                nome = op.get_nome()
+                email = op.get_email()
+                fone = op.get_fone()
+                senha = st.text_input("Nova senha", op.get_senha(), type="password")
+            else:
+                nome = st.text_input("Novo nome", op.get_nome())
+                email = st.text_input("Novo e-mail", op.get_email())
+                fone = st.text_input("Novo fone", op.get_fone())
+                senha = st.text_input("Nova senha", op.get_senha(), type="password")
             if st.button("Atualizar"):
-                if op.get_nome() == "admin" and op.get_email() == "admin" and op.get_fone() == "fone" and op.get_senha() == "1234":
-                    st.error("Conta admin não pode ser atualizada")
-                    return
                 if not op.get_email() == email: # se o email foi alterado
                     if View.email_duplicado_cliente(email): #o cliente que quiser atualizar um simples nome precisa trocar o email
                         st.error("Conta cliente já existente")
                         return
-                if View.usuario_nunca_admin(nome):
-                    st.error("Nome inválido")
-                    return
+                if email != "admin": #suponho que não existirá um email "admin" em clientes diferentes
+                    if View.usuario_nunca_admin(nome):
+                        st.error("Nome inválido")
+                        return
                 id = op.get_id()
                 View.cliente_atualizar(id, nome, email, fone, senha)
                 st.success("Cliente atualizado com sucesso")
@@ -69,8 +74,12 @@ class ManterClienteUI:
         else:
             op = st.selectbox("Exclusão de Clientes", clientes)
             if st.button("Excluir"): 
-                if op.get_nome() == "admin":
+                if op.get_email() == "admin":
                     st.error("Conta admin não pode ser excluída")
+                    return
+                if len(View.horario_listar_id_cliente(op.get_id())) != 0: #len(lista de horário do usuário X) != 0:
+                    st.error("Usuário com agendamento")
+                    return
                 id = op.get_id()
                 View.cliente_excluir(id)
                 st.success("Cliente excluído com sucesso")

@@ -19,11 +19,15 @@ class View:
             if c.get_email() == email and c.get_senha() == senha: return{"id": c.get_id(), "nome": c.get_nome(), "email": c.get_email}
         return None
     def cliente_inserir(nome, email, fone, senha):
-        cliente = Cliente(0, nome, email, fone, senha)
-        ClienteDAO.inserir(cliente)
+        try:  
+            cliente = Cliente(0, nome, email, fone, senha)
+            ClienteDAO.inserir(cliente)
+        except ValueError: return
     def cliente_atualizar(id, nome, email, fone, senha):
-        cliente = Cliente(id, nome, email, fone, senha)
-        ClienteDAO.atualizar(cliente)
+        try:
+            cliente = Cliente(id, nome, email, fone, senha)
+            ClienteDAO.atualizar(cliente)
+        except ValueError: return
     def cliente_excluir(id):
         cliente = Cliente(id, "", "", "", "")
         ClienteDAO.excluir(cliente)
@@ -44,11 +48,15 @@ class View:
         r.sort(key = lambda obj : obj.get_nome())
         return r
     def profissional_inserir(nome, especialidade, conselho, email, senha):
-        profissio = Profissional(0, nome, especialidade, conselho, email, senha)
-        ProfissionalDAO.inserir(profissio)
+        try:
+            profissio = Profissional(0, nome, especialidade, conselho, email, senha)
+            ProfissionalDAO.inserir(profissio)
+        except ValueError: return
     def profissional_atualizar(id, nome, especialidade, conselho, email, senha):
-        profissio = Profissional(id, nome, especialidade, conselho, email, senha)
-        ProfissionalDAO.atualizar(profissio)
+        try:
+            profissio = Profissional(id, nome, especialidade, conselho, email, senha)
+            ProfissionalDAO.atualizar(profissio)
+        except ValueError: return
     def profissional_excluir(id):
         profissio = Profissional(id, "", "", "", "", "")
         ProfissionalDAO.excluir(profissio)
@@ -83,24 +91,28 @@ class View:
         return servico
 
     def horario_inserir(data, confirmado, id_cliente, id_servico, id_profissio):
-        c = Horario(0, data)
-        c.set_confirmado(confirmado)
-        c.set_id_cliente(id_cliente)
-        c.set_id_servico(id_servico)
-        c.set_id_profissional(id_profissio)
-        HorarioDAO.inserir(c)
+        try:
+            c = Horario(0, data)
+            c.set_confirmado(confirmado)
+            c.set_id_cliente(id_cliente)
+            c.set_id_servico(id_servico)
+            c.set_id_profissional(id_profissio)
+            HorarioDAO.inserir(c)
+        except ValueError: return
     def horario_listar():
         View.horario_ministrar()
         r = HorarioDAO.listar()
         r.sort(key = lambda obj : obj.get_data())
         return r
     def horario_atualizar(id, data, confirmado, id_cliente, id_servico, id_profissio):
-        c = Horario(id, data)
-        c.set_confirmado(confirmado)
-        c.set_id_cliente(id_cliente)
-        c.set_id_servico(id_servico)
-        c.set_id_profissional(id_profissio)
-        HorarioDAO.atualizar(c)
+        try:
+            c = Horario(id, data)
+            c.set_confirmado(confirmado)
+            c.set_id_cliente(id_cliente)
+            c.set_id_servico(id_servico)
+            c.set_id_profissional(id_profissio)
+            HorarioDAO.atualizar(c)
+        except ValueError: return
     def horario_excluir(id):
         c = Horario(id, None)
         HorarioDAO.excluir(c)
