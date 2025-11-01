@@ -1,4 +1,6 @@
+from models.DAO import Manipulacao
 import json
+
 class Servico:
     def __init__(self, id, d, v):
         self.set_id(id)        
@@ -20,58 +22,33 @@ class Servico:
     def __str__(self): return f"ID: {self.__id} - Valor: {self.__valor} - Descrição: {self.__descricao}"
     
 class ServicoDAO:
-    __coisas = []
-    #.inserir
-    @classmethod
-    def inserir(cls, obj):
-        cls.abrir()
-        idd = 0
-        if len(cls.__coisas) != 0:
-            for aux in cls.__coisas:
-                if aux.get_id() > idd: idd = aux.get_id()
-        obj.set_id(idd + 1)
-        cls.__coisas.append(obj)
-        cls.salvar()
-    #.listar
-    @classmethod
-    def listar(cls):
-        cls.abrir()
-        return cls.__coisas
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
-        for obj in cls.__coisas:
-            if obj.get_id() == id: return obj
-        return None
-    #.atualizar
-    @classmethod
-    def atualizar(cls, obj):
-        aux = cls.listar_id(obj.get_id())
-        if aux != None:
-            cls.__coisas.remove(aux)
-            cls.__coisas.append(obj)
-            cls.salvar()
-    #.excluir
-    @classmethod
-    def excluir(cls, obj):
-        aux = cls.listar_id(obj.get_id())
-        if aux != None:
-            cls.__coisas.remove(aux)
-            cls.salvar()
-    #.abrir
-    @classmethod
-    def abrir(cls):
-        cls.__coisas = []
+    def inserir(obj): 
+        ServicoDAO.abrir()
+        Manipulacao.inserir(obj)
+        ServicoDAO.salvar()
+    def listar():
+        ServicoDAO.abrir()
+        Manipulacao.listar()
+    def listar_id(id):
+        ServicoDAO.abrir()
+        Manipulacao.listar_id(id)
+    def atualizar(id):
+        Manipulacao.atualizar(id)
+        ServicoDAO.salvar()
+    def excluir(id):
+        Manipulacao.excluir(id)
+        ServicoDAO.salvar()
+
+    def abrir():
+        Manipulacao.objetos = []
         try:
             with open("servico.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Servico.from_json(dic)
-                    cls.__coisas.append(obj)
+                    Manipulacao.objetos.append(obj)
         except FileNotFoundError: pass
 
-    #.salvar
-    @classmethod
-    def salvar(cls):
+    def salvar():
         with open("servico.json", mode="w") as arquivo:
-            json.dump(cls.__coisas, arquivo, default = Servico.to_json)
+            json.dump(Manipulacao.objetos, arquivo, default = Servico.to_json)

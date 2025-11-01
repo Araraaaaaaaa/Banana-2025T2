@@ -1,4 +1,6 @@
+from models.DAO import Manipulacao
 import json
+
 class Cliente:
     def __init__(self, id, nome, email, fone, senha):
         self.set_id(id)
@@ -35,59 +37,33 @@ class Cliente:
 
 
 class ClienteDAO():
-    __objetos = []
-    #ClienteDAO.inserir
-    @classmethod
-    def inserir(cls, obj):
-        cls.abrir()
-        iddd = 0
-        for aux in cls.__objetos:
-            if aux.get_id() > iddd: iddd = aux.get_id()
-        obj.set_id(iddd +1)
-        cls.__objetos.append(obj)
-        cls.salvar()
-    #ClienteDAO.listar
-    @classmethod
-    def listar(cls):
-        cls.abrir()
-        return cls.__objetos
-
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
-        for obj in cls.__objetos:
-            if obj.get_id() == id: return obj
-        return None
+    def inserir(obj): 
+        ClienteDAO.abrir()
+        Manipulacao.inserir(obj)
+        ClienteDAO.salvar()
+    def listar():
+        ClienteDAO.abrir()
+        Manipulacao.listar()
+    def listar_id(id):
+        ClienteDAO.abrir()
+        Manipulacao.listar_id(id)
+    def atualizar(id):
+        Manipulacao.atualizar(id)
+        ClienteDAO.salvar()
+    def excluir(id):
+        Manipulacao.excluir(id)
+        ClienteDAO.salvar()
     
-    #ClienteDAO.atualizar
-    @classmethod
-    def atualizar(cls, obj):
-        aux = cls.listar_id(obj.get_id())
-        if aux != None:
-            cls.__objetos.remove(aux)
-            cls.__objetos.append(obj)
-            cls.salvar()
-
-    #ClienteDAO.excluir
-    @classmethod
-    def excluir(cls, obj):
-        aux = cls.listar_id(obj.get_id())
-        if aux != None:
-            cls.__objetos.remove(aux)
-            cls.salvar()
-    #.abrir
-    @classmethod
-    def abrir(cls):
-        cls.__objetos = []
+    def abrir():
+        Manipulacao.objetos = []
         try:
             with open("clientes.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Cliente.from_json(dic)
-                    cls.__objetos.append(obj)
+                    Manipulacao.objetos.append(obj)
         except FileNotFoundError: pass
-    #.salvar
-    @classmethod
-    def salvar(cls):
+
+    def salvar():
         with open("clientes.json", mode="w") as arquivo:
-            json.dump(cls.__objetos, arquivo, default = Cliente.to_json)
+            json.dump(Manipulacao.objetos, arquivo, default = Cliente.to_json)

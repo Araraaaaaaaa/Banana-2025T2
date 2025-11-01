@@ -1,3 +1,4 @@
+from models.DAO import Manipulacao
 import json
 
 class Profissional:
@@ -35,57 +36,33 @@ class Profissional:
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__especialidade} - {self.__conselho} - {self.__email}"
 
 class ProfissionalDAO:
+    def inserir(obj): 
+        ProfissionalDAO.abrir()
+        Manipulacao.inserir(obj)
+        ProfissionalDAO.salvar()
+    def listar():
+        ProfissionalDAO.abrir()
+        Manipulacao.listar()
+    def listar_id(id):
+        ProfissionalDAO.abrir()
+        Manipulacao.listar_id(id)
+    def atualizar(id):
+        Manipulacao.atualizar(id)
+        ProfissionalDAO.salvar()
+    def excluir(id):
+        Manipulacao.excluir(id)
+        ProfissionalDAO.salvar()
 
-    __pessoas = []
-    @classmethod
-    def inserir(cls, obj):
-        cls.abrir()
-        idddd = 0
-        for aux in cls.__pessoas:
-            if aux.get_id() > idddd: idddd = aux.get_id()
-        obj.set_id(idddd +1)
-        cls.__pessoas.append(obj)
-        cls.salvar()
-
-    @classmethod
-    def listar(cls):
-        cls.abrir()
-        return cls.__pessoas
-
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
-        for obj in cls.__pessoas:
-            if obj.get_id() == id: return obj
-        return None
-    
-    @classmethod
-    def atualizar(cls, obj):
-        aux = cls.listar_id(obj.get_id())
-        if aux != None:
-            cls.__pessoas.remove(aux)
-            cls.__pessoas.append(obj)
-            cls.salvar()
-
-    @classmethod
-    def excluir(cls, obj):
-        aux = cls.listar_id(obj.get_id())
-        if aux != None:
-            cls.__pessoas.remove(aux)
-            cls.salvar()
-
-    @classmethod
-    def abrir(cls):
-        cls.__pessoas = []
+    def abrir():
+        Manipulacao.objetos = []
         try:
             with open("profissionais.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Profissional.from_json(dic)
-                    cls.__pessoas.append(obj)
+                    Manipulacao.objetos.append(obj)
         except FileNotFoundError: pass
 
-    @classmethod
-    def salvar(cls):
+    def salvar():
         with open("profissionais.json", mode="w") as arquivo:
-            json.dump(cls.__pessoas, arquivo, default = Profissional.to_json)
+            json.dump(Manipulacao.objetos, arquivo, default = Profissional.to_json)
