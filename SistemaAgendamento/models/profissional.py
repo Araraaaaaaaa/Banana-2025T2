@@ -1,4 +1,4 @@
-from models.DAO import Manipulacao
+from models.DAO import DAO
 import json
 
 class Profissional:
@@ -35,32 +35,20 @@ class Profissional:
     def from_json(dic): return Profissional(dic["id"], dic["nome"], dic["espec"], dic["conselho"], dic["email"], dic["senha"])
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__especialidade} - {self.__conselho} - {self.__email}"
 
-class ProfissionalDAO:
-    def inserir(obj): 
-        Manipulacao.inserir(obj, ProfissionalDAO.abrir())
-        ProfissionalDAO.salvar()
-    def listar():
-        return Manipulacao.listar(ProfissionalDAO.abrir())
-    def listar_id(id):
-        return Manipulacao.listar_id(id, ProfissionalDAO.abrir())
-    def atualizar(id):
-        Manipulacao.atualizar(id)
-        ProfissionalDAO.salvar()
-    def excluir(id):
-        Manipulacao.excluir(id)
-        ProfissionalDAO.salvar()
-
-    def abrir():
-        objetos = []
+class ProfissionalDAO(DAO):
+    
+    @classmethod
+    def abrir(cls):
+        cls._objetos = []
         try:
             with open("profissionais.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Profissional.from_json(dic)
-                    objetos.append(obj)
+                    cls._objetos.append(obj)
         except FileNotFoundError: pass
-        return objetos
 
-    def salvar():
+    @classmethod
+    def salvar(cls):
         with open("profissionais.json", mode="w") as arquivo:
-            json.dump(Manipulacao.objetos, arquivo, default = Profissional.to_json)
+            json.dump(cls._objetos, arquivo, default = Profissional.to_json)

@@ -1,4 +1,4 @@
-from models.DAO import Manipulacao
+from models.DAO import DAO
 from datetime import datetime
 import json
 
@@ -42,36 +42,37 @@ class Horario:
 
     def __str__(self): return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - {self.__confirmado}"
 
-class HorarioDAO:
-    def inserir(obj): 
-        Manipulacao.inserir(obj, HorarioDAO.abrir())
-        HorarioDAO.salvar()
-    def listar():
-        return Manipulacao.listar(HorarioDAO.abrir())
-    def listar_id(id):
-        return Manipulacao.listar_id(id, HorarioDAO.abrir())
-    def atualizar(id):
-        Manipulacao.atualizar(id)
-        HorarioDAO.salvar()
-    def excluir(id):
-        Manipulacao.excluir(id)
-        HorarioDAO.salvar()
-    def listar_id_cliente(id_cliente):
-        return Manipulacao.listar_id_cliente(id_cliente, HorarioDAO.abrir())
-    def listar_id_profissional(id_profissional):
-        return Manipulacao.listar_id_profissional(id_profissional, HorarioDAO.abrir())
+class HorarioDAO(DAO):
+    @classmethod
+    def listar_id_profissional(cls, id):
+        cls.abrir()
+        lista = []
+        for obj in cls._objetos:
+            if obj.get_id_profissional() == id:
+                lista.append(obj)
+        return lista
+    
+    @classmethod
+    def listar_id_cliente(cls, id):
+        cls.abrir()
+        lista = []
+        for obj in cls._objetos:
+            if obj.get_id_cliente() == id:
+                lista.append(obj)
+        return lista
 
-    def abrir():
-        objetos = []
+    @classmethod
+    def abrir(cls):
+        cls._objetos = []
         try:
             with open("horarios.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Horario.from_json(dic)
-                    objetos.append(obj)
+                    cls._objetos.append(obj)
         except FileNotFoundError: pass
-        return objetos
 
-    def salvar():
+    @classmethod
+    def salvar(cls):
         with open("horarios.json", mode="w") as arquivo:
-            json.dump(Manipulacao.objetos, arquivo, default = Horario.to_json)
+            json.dump(cls._objetos, arquivo, default = Horario.to_json)

@@ -1,4 +1,4 @@
-from models.DAO import Manipulacao
+from models.DAO import DAO
 import json
 
 class Servico:
@@ -21,32 +21,20 @@ class Servico:
 
     def __str__(self): return f"ID: {self.__id} - Valor: {self.__valor} - Descrição: {self.__descricao}"
     
-class ServicoDAO:
-    def inserir(obj): 
-        Manipulacao.inserir(obj, ServicoDAO.abrir())
-        ServicoDAO.salvar()
-    def listar():
-        return Manipulacao.listar(ServicoDAO.abrir())
-    def listar_id(id):
-        return Manipulacao.listar_id(id, ServicoDAO.abrir())
-    def atualizar(id):
-        Manipulacao.atualizar(id)
-        ServicoDAO.salvar()
-    def excluir(id):
-        Manipulacao.excluir(id)
-        ServicoDAO.salvar()
+class ServicoDAO(DAO):
 
-    def abrir():
-        objetos = []
+    @classmethod
+    def abrir(cls):
+        cls._objetos = []
         try:
             with open("servico.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Servico.from_json(dic)
-                    objetos.append(obj)
+                    cls._objetos.append(obj)
         except FileNotFoundError: pass
-        return objetos
 
-    def salvar():
+    @classmethod
+    def salvar(cls):
         with open("servico.json", mode="w") as arquivo:
-            json.dump(Manipulacao.objetos, arquivo, default = Servico.to_json)
+            json.dump(cls._objetos, arquivo, default = Servico.to_json)
