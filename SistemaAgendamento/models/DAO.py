@@ -1,14 +1,9 @@
-from models.profissional import ProfissionalDAO, Profissional
-from models.cliente import ClienteDAO, Cliente
-from models.horario import HorarioDAO, Horario
-from models.servico import ServicoDAO, Servico
-
 class Manipulacao:
     objetos = []
 
     @classmethod
-    def listar_id_profissional(id):
-        #cls.abrir()
+    def listar_id_profissional(cls, id, tos):
+        cls.objetos = tos
         lista = []
         for obj in Manipulacao.objetos:
             if obj.get_id_profissional() == id:
@@ -16,8 +11,8 @@ class Manipulacao:
         return lista
     
     @classmethod
-    def listar_id_cliente(id):
-        #cls.abrir()
+    def listar_id_cliente(cls, id, tos):
+        cls.objetos = tos
         lista = []
         for obj in Manipulacao.objetos:
             if obj.get_id_cliente() == id:
@@ -25,8 +20,8 @@ class Manipulacao:
         return lista
     
     @classmethod
-    def inserir(cls, obj):
-        #cls.abrir()
+    def inserir(cls, obj, tos):
+        cls.objetos = tos
         id = 0
         for aux in cls.objetos:
             if aux.get_id() > id: 
@@ -36,13 +31,13 @@ class Manipulacao:
         #cls.salvar()
 
     @classmethod
-    def listar(cls):
-        #cls.abrir()
+    def listar(cls, tos):
+        cls.objetos = tos
         return cls.objetos
     
     @classmethod
-    def listar_id(cls, id):
-        #cls.abrir()
+    def listar_id(cls, id, tos):
+        cls.objetos = tos
         for obj in cls.objetos:
             if obj.get_id() == id: return obj
         return None

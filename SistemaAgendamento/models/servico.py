@@ -23,15 +23,12 @@ class Servico:
     
 class ServicoDAO:
     def inserir(obj): 
-        ServicoDAO.abrir()
-        Manipulacao.inserir(obj)
+        Manipulacao.inserir(obj, ServicoDAO.abrir())
         ServicoDAO.salvar()
     def listar():
-        ServicoDAO.abrir()
-        Manipulacao.listar()
+        return Manipulacao.listar(ServicoDAO.abrir())
     def listar_id(id):
-        ServicoDAO.abrir()
-        Manipulacao.listar_id(id)
+        return Manipulacao.listar_id(id, ServicoDAO.abrir())
     def atualizar(id):
         Manipulacao.atualizar(id)
         ServicoDAO.salvar()
@@ -40,14 +37,15 @@ class ServicoDAO:
         ServicoDAO.salvar()
 
     def abrir():
-        Manipulacao.objetos = []
+        objetos = []
         try:
             with open("servico.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Servico.from_json(dic)
-                    Manipulacao.objetos.append(obj)
+                    objetos.append(obj)
         except FileNotFoundError: pass
+        return objetos
 
     def salvar():
         with open("servico.json", mode="w") as arquivo:

@@ -37,15 +37,12 @@ class Profissional:
 
 class ProfissionalDAO:
     def inserir(obj): 
-        ProfissionalDAO.abrir()
-        Manipulacao.inserir(obj)
+        Manipulacao.inserir(obj, ProfissionalDAO.abrir())
         ProfissionalDAO.salvar()
     def listar():
-        ProfissionalDAO.abrir()
-        Manipulacao.listar()
+        return Manipulacao.listar(ProfissionalDAO.abrir())
     def listar_id(id):
-        ProfissionalDAO.abrir()
-        Manipulacao.listar_id(id)
+        return Manipulacao.listar_id(id, ProfissionalDAO.abrir())
     def atualizar(id):
         Manipulacao.atualizar(id)
         ProfissionalDAO.salvar()
@@ -54,14 +51,15 @@ class ProfissionalDAO:
         ProfissionalDAO.salvar()
 
     def abrir():
-        Manipulacao.objetos = []
+        objetos = []
         try:
             with open("profissionais.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Profissional.from_json(dic)
-                    Manipulacao.objetos.append(obj)
+                    objetos.append(obj)
         except FileNotFoundError: pass
+        return objetos
 
     def salvar():
         with open("profissionais.json", mode="w") as arquivo:

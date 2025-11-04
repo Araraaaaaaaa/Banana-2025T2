@@ -37,16 +37,13 @@ class Cliente:
 
 
 class ClienteDAO():
-    def inserir(obj): 
-        ClienteDAO.abrir()
-        Manipulacao.inserir(obj)
+    def inserir(obj):    
+        Manipulacao.inserir(obj, ClienteDAO.abrir())
         ClienteDAO.salvar()
     def listar():
-        ClienteDAO.abrir()
-        Manipulacao.listar()
+        return Manipulacao.listar(ClienteDAO.abrir())
     def listar_id(id):
-        ClienteDAO.abrir()
-        Manipulacao.listar_id(id)
+        return Manipulacao.listar_id(id, ClienteDAO.abrir())
     def atualizar(id):
         Manipulacao.atualizar(id)
         ClienteDAO.salvar()
@@ -55,14 +52,15 @@ class ClienteDAO():
         ClienteDAO.salvar()
     
     def abrir():
-        Manipulacao.objetos = []
+        objetos = []
         try:
             with open("clientes.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Cliente.from_json(dic)
-                    Manipulacao.objetos.append(obj)
+                    objetos.append(obj)
         except FileNotFoundError: pass
+        return objetos
 
     def salvar():
         with open("clientes.json", mode="w") as arquivo:
