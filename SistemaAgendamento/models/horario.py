@@ -44,15 +44,12 @@ class Horario:
 
 class HorarioDAO:
     def inserir(obj): 
-        HorarioDAO.abrir()
-        Manipulacao.inserir(obj)
+        Manipulacao.inserir(obj, HorarioDAO.abrir())
         HorarioDAO.salvar()
     def listar():
-        HorarioDAO.abrir()
-        Manipulacao.listar()
+        return Manipulacao.listar(HorarioDAO.abrir())
     def listar_id(id):
-        HorarioDAO.abrir()
-        Manipulacao.listar_id(id)
+        return Manipulacao.listar_id(id, HorarioDAO.abrir())
     def atualizar(id):
         Manipulacao.atualizar(id)
         HorarioDAO.salvar()
@@ -60,21 +57,20 @@ class HorarioDAO:
         Manipulacao.excluir(id)
         HorarioDAO.salvar()
     def listar_id_cliente(id_cliente):
-        HorarioDAO.salvar()
-        Manipulacao.listar_id_cliente(id_cliente)
+        return Manipulacao.listar_id_cliente(id_cliente, HorarioDAO.abrir())
     def listar_id_profissional(id_profissional):
-        HorarioDAO.salvar()
-        Manipulacao.listar_id_profissional(id_profissional)
+        return Manipulacao.listar_id_profissional(id_profissional, HorarioDAO.abrir())
 
     def abrir():
-        Manipulacao.objetos = []
+        objetos = []
         try:
             with open("horarios.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Horario.from_json(dic)
-                    Manipulacao.objetos.append(obj)
+                    objetos.append(obj)
         except FileNotFoundError: pass
+        return objetos
 
     def salvar():
         with open("horarios.json", mode="w") as arquivo:
