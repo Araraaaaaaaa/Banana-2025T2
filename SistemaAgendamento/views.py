@@ -102,7 +102,6 @@ class View:
             HorarioDAO.inserir(c)
         except ValueError: return
     def horario_listar():
-        View.horario_ministrar()
         r = HorarioDAO.listar()
         r.sort(key = lambda obj : obj.get_data())
         return r
@@ -118,26 +117,22 @@ class View:
     def horario_excluir(id):
         c = Horario(id, None)
         HorarioDAO.excluir(c)
-    def horario_ministrar():
+    '''def horario_ministrar():
         HORARIOS = HorarioDAO.listar() #confirma a lista
         if len(HORARIOS) != 0:
             for Hora in HORARIOS:
                 if Hora.get_data() < datetime.now():
-                    View.horario_excluir(Hora.get_id()) #exclui os antigos
+                    View.horario_excluir(Hora.get_id()) #exclui os antigos'''
     def horario_listar_id(id):
-        View.horario_ministrar()
         horario = HorarioDAO.listar_id(id)
         return horario
     def horario_listar_id_cliente(id):
-        View.horario_ministrar()
         horario = HorarioDAO.listar_id_cliente(id)
         return horario
     def horario_listar_id_profissional(id):
-        View.horario_ministrar()
         horario = HorarioDAO.listar_id_profissional(id)
         return horario
     def horario_agendar_horario(id_profissional):
-        View.horario_ministrar()
         r = []
         agora = datetime.now()
         for h in View.horario_listar():
@@ -146,15 +141,49 @@ class View:
         r.sort(key = lambda h : h.get_data())
         return r
     
-    def receita_ministrar(): #excluir receitas vencidas do json
+    '''def receita_ministrar(): #excluir receitas vencidas do json
+        RECEITAS = ReceitaDAO.listar() #confirma a lista
+        if len(RECEITAS) != 0:
+            for receita in RECEITAS:
+                if receita.get_data() < datetime.now():
+                    View.receita_excluir(receita.get_id()) #exclui os antigos'''
     def receita_listar():
-    def receita_excluir():
-    def receita_listar_id():
-    def receita_listar_id_cliente(): #ver as receitas de cada cliente
-    def receita_inserir():
+        return ReceitaDAO.listar
+    def receita_excluir(id):
+        reci = Receita(id, "", "", "", "", "", None)
+        ReceitaDAO.excluir(reci)
+    def receita_listar_id(id):
+        return ReceitaDAO.listar_id(id)
+    def receita_listar_id_cliente(id): #ver as receitas de cada cliente
+        return ReceitaDAO.listar_id_cliente(id)
+    def receita_inserir(id_medicamento, id_profissional, id_cliente, periodo, dosagem, validade):
+        try:
+            validade = datetime.strptime(validade, "%d/%m/%Y")
+            receita = Receita(0, id_medicamento, id_profissional, id_cliente, periodo, dosagem, validade)
+            ReceitaDAO.inserir(receita)
+        except ValueError: return
 
+    def Estar(algo, apli):
+        lit = View.medicamento_listar()
+        for i in lit:
+            if i.get_nome() == algo: 
+                if i.get_aplicacao() == apli: return True
+        return False
     def medicamento_listar():
-    def medicamento_excluir():
-    def medicamento_atualizar():
-    def medicamento_listar_id():
-    def medicamento_inserir():
+        return MedicamentoDAO.listar()
+    def medicamento_excluir(id):
+        medi = Medicamento(id, "n", "n", "n")
+        MedicamentoDAO.excluir(medi)
+    def medicamento_atualizar(id, nome, objetivo, aplicacao):
+        medicamento = Medicamento(id, nome, objetivo, aplicacao)
+        MedicamentoDAO.atualizar(medicamento)
+    def medicamento_listar_id(id):
+        return MedicamentoDAO.listar_id(id)
+    def medicamento_inserir(nome, objetivo, aplicacao):
+        try:
+            medicamento = Medicamento(0, nome, objetivo, aplicacao)
+            MedicamentoDAO.inserir(medicamento)
+        except ValueError: return
+
+        #resolver para não aparecer os horários no passado. não pode confirmar um horário passadoou poder ver na aplicação
+        #não resolvido o problema dos horários duplicados

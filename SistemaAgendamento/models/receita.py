@@ -25,22 +25,31 @@ class Receita:
     def set_id_profissional(self, id_profissional): self.__id_profissional = id_profissional
     def set_id_cliente(self, id_cliente): self.__id_cliente = id_cliente
     def set_periodo(self, periodo): #ex. "A cada 3 dias durante 3 meses"
-        if periodo <= 0: raise ValueError("Periodo inválido")
+        if periodo == "": raise ValueError("Periodo inválido")
         self.__periodo = periodo
     def set_dosagem(self, dosagem): #ex. 1 gota
         if dosagem == "": raise ValueError("Nome do medicamento inválido")
         self.__dosagem = dosagem
     def set_validade(self, validade):
-        if validade < datetime.timedelta(2025, 1, 1): raise ValueError("Data inválida")
+        if validade != None and validade < datetime.strptime("1/1/2025", "%d/%m/%Y"): raise ValueError("Validade inválida")
         self.__validade = validade
 
     def to_df(self): return {"id": self.__id, "validade": self.__validade}
-    def to_json(self): return {"id": self.__id, "id-medicamento": self.__id_medicamento, "id-profissional": self.__id_profissional, "id-cliente": self.__id_cliente, "periodo": self.__periodo, "dosagem": self.__dosagem, "validade": self.__validade}
+    def to_json(self): return {"id": self.__id, "id_medicamento": self.__id_medicamento, "id_profissional": self.__id_profissional, "id_cliente": self.__id_cliente, "periodo": self.__periodo, "dosagem": self.__dosagem, "validade": self.__validade}
     @staticmethod
-    def from_json(dic): return Receita(dic["id"], dic["id-medicamento"], dic["id-profissional"], dic["id-cliente"], dic["periodo"], dic["dosagem"], dic["validade"])
+    def from_json(dic): return Receita(dic["id"], dic["id_medicamento"], dic["id_profissional"], dic["id_cliente"], dic["periodo"], dic["dosagem"], dic["validade"])
     def __str__(self): return f"{self.__id} - {self.__periodo} - {self.__dosagem} - {self.__validade}"
 
 class ReceitaDAO(DAO):
+    @classmethod
+    def listar_id_cliente(cls, id):
+        cls.abrir()
+        lista = []
+        for obj in cls._objetos:
+            if obj.get_id_cliente() == id:
+                lista.append(obj)
+        return lista
+
     @classmethod
     def abrir(cls):
         cls._objetos = []

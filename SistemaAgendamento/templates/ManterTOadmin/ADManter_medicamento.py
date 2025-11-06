@@ -5,7 +5,7 @@ from views import View
 
 class ManterMedicamentosUI:
     def main():
-        st.title("Cadastro de profissional")
+        st.title("Cadastro de Medicamentos")
         tab1, tab2, tab3, tab4 = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
         with tab1: ManterMedicamentosUI.listar()
         with tab2: ManterMedicamentosUI.inserir()
@@ -26,6 +26,9 @@ class ManterMedicamentosUI:
         objetivo = st.text_input("Informe quais os objetivos do remédio")
         aplicacao = st.selectbox("Informe a forma de aplicação", ["oral", "intravenosa", "intramuscular", "subcutânea", "inalatória", "tópica", "mucosa "]) # selecionar itens pré definidos
         if st.button("Inserir"):
+            if View.Estar(nome, aplicacao):
+                st.error("Remédio já cadastrado")
+                return
             View.medicamento_inserir(nome, objetivo, aplicacao)
             st.success("Medicamento inserido com sucesso")
             time.sleep(2)
@@ -37,9 +40,14 @@ class ManterMedicamentosUI:
         else:
             op = st.selectbox("Atualização de medicamentos", medi)
             nome = st.text_input("Informe o novo nome-fantasia", op.get_nome())
-            objetivo = st.text_input("Informe quais os novos objetivos do remédio", op.get_objetivo)
+            objetivo = st.text_input("Informe quais os novos objetivos do remédio", op.get_objetivo())
             aplicacao = st.selectbox("Informe a nova forma de aplicação", ["oral", "intravenosa", "intramuscular", "subcutânea", "inalatória", "tópica", "mucosa "]) # selecionar itens pré definidos
             if st.button("Atualizar"):
+                if op.get_nome() == nome and op.get_aplicacao() == aplicacao:
+                    st.error("Nenhuma mudança feita")
+                if View.Estar(nome, aplicacao):
+                    st.error("Remédio já cadastrado")
+                    return
                 id = op.get_id()
                 View.medicamento_atualizar(id, nome, objetivo, aplicacao)
                 st.success("Medicamento atualizado com sucesso")
@@ -50,6 +58,9 @@ class ManterMedicamentosUI:
         else:
             op = st.selectbox("Exclusão de medicamentos", medi)
             if st.button("Excluir"): 
+                # if len(op.get_id() in View.receita_listar()) != 0: 
+                #     st.error("Medicamento foi receitado")
+                #     return
                 id = op.get_id()
                 View.medicamento_excluir(id)
                 st.success("Medicamento excluído com sucesso")

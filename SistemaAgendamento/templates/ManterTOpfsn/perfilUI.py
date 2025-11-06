@@ -107,4 +107,5 @@ class ProfissionalUI:
                 time.sleep(2)
                 st.rerun()
 
+#não poder criar receitas iguais com a mesma validade. 
 
