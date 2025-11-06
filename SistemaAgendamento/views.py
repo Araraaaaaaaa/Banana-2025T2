@@ -2,6 +2,8 @@ from models.profissional import Profissional, ProfissionalDAO
 from models.cliente import Cliente, ClienteDAO
 from models.servico import Servico, ServicoDAO
 from models.horario import Horario, HorarioDAO
+from models.receita import Receita, ReceitaDAO
+from models.medicamento import Medicamento, MedicamentoDAO
 from datetime import datetime
 
 class View:
@@ -143,3 +145,16 @@ class View:
                 r.append(h)
         r.sort(key = lambda h : h.get_data())
         return r
+    
+    def receita_ministrar(): #excluir receitas vencidas do json
+    def receita_listar():
+    def receita_excluir():
+    def receita_listar_id():
+    def receita_listar_id_cliente(): #ver as receitas de cada cliente
+    def receita_inserir():
+
+    def medicamento_listar():
+    def medicamento_excluir():
+    def medicamento_atualizar():
+    def medicamento_listar_id():
+    def medicamento_inserir():

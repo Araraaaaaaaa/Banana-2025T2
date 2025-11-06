@@ -26,8 +26,9 @@ class Medicamento:
 
     def to_df(self): return {"nome": self.__nome, "aplicacao": self.__aplicacao, "objetivo": self.__objetivo}
     def to_json(self): return {"id": self.__id, "nome": self.__nome, "objetivo": self.__objetivo, "aplicacao": self.__aplicacao,}
-    def from_json(self):
-    def __str__(self):
+    @staticmethod
+    def from_json(dic): return Medicamento(dic["id"], dic["nome"], dic["objetivo"], dic["aplicacao"])
+    def __str__(self): return f"{self.__id} - {self.__nome} - {self.__objetivo} - {self.__aplicacao}"
 
 class MedicamentoDAO(DAO):
     @classmethod

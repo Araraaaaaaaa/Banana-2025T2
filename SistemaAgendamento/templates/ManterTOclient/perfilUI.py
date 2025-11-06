@@ -6,10 +6,11 @@ import time
 class ClienteUI:
     def main():
         st.title("Painel Cliente")
-        tab1, tab2, tab3 = st.tabs(["Perfil", "Agendar Serviço", "Ver Serviços"])
+        tab1, tab2, tab3, tab4 = st.tabs(["Perfil", "Agendar Serviço", "Ver Serviços", "Ver Receitas"])
         with tab1: ClienteUI.perfil()
         with tab2: ClienteUI.agendar()
         with tab3: ClienteUI.visualizar()
+        with tab4: ClienteUI.receitas()
 
     def perfil():
         op = View.cliente_listar_id(st.session_state["usuario_id"])
@@ -62,3 +63,15 @@ class ClienteUI:
             df = pd.DataFrame(dic)
             st.dataframe(df)
             st.rerun()
+
+    def receitas():
+        op = View.receita_listar_id_cliente(st.session_state["usuario_id"])
+        if len(op) == 0: st.write("Sem receitas válidas")
+        else:
+            receita = st.selectbox("Escolha a receita", op)
+            if st.button("Ver mais"):
+                st.write(receita)
+                st.write(View.medicamento_listar_id(receita.get_medicamento_id()))
+                cliente = View.cliente_listar_id(st.session_state["usuario_id"])
+                st.caption(cliente.get_nome())
+                st.caption(View.profissional_listar_id(receita.get_profissional_id()))

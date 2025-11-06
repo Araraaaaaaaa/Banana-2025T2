@@ -7,11 +7,12 @@ import time
 class ProfissionalUI:
     def main():
         st.title("Painel Profissional")
-        tab1, tab2, tab3, tab4 = st.tabs(["Perfil", "Abrir Agenda", "Ver Serviços", "Confirmar Serviço"])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Perfil", "Abrir Agenda", "Ver Serviços", "Confirmar Serviço", "Criar Receita"])
         with tab1: ProfissionalUI.perfil()
         with tab2: ProfissionalUI.abrir()
         with tab3: ProfissionalUI.visualizar()
         with tab4: ProfissionalUI.confirmar_servico()
+        with tab5: ProfissionalUI.criar_receita()
 
     def perfil():
         op = View.profissional_listar_id(st.session_state["usuario_id"])
@@ -88,4 +89,22 @@ class ProfissionalUI:
                 st.success("Horário confirmado com sucesso")
                 time.sleep(2)
                 st.rerun()
-           
+
+    def criar_receita():
+        medi = View.medicamento_listar()
+        cliente = View.cliente_listar()
+        if len(medi) == 0: st.write("Nenhum medicamento cadastrado")
+        elif len(cliente) == 0: st.write("Nenhum cliente cadastrado")
+        else:
+            opM = st.selectbox("Escolha o medicamento", medi)
+            opC = st.selectbox("Escolha o paciente", cliente)
+            periodo = st.text_input("Defina os intervalos de uso")
+            dosagem = st.text_input("Defina a dosagem durante os intervalos")
+            validade = st.text_input("Defina a validade da receita")
+            if st.button("Inserir"):
+                View.receita_inserir(opM.get_id(), st.session_state["usuario_id"], opC.get_id(), periodo, dosagem, validade )
+                st.success("Receita criada com sucesso")
+                time.sleep(2)
+                st.rerun()
+
+
