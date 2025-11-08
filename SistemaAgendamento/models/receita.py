@@ -1,16 +1,15 @@
 from models.DAO import DAO
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 class Receita:
-    def __init__(self,idR, id_medicamento, id_profissional, id_cliente, periodo, dosagem, validade):
+    def __init__(self,idR, id_medicamento, id_profissional, id_cliente, periodo, dosagem):
         self.set_id(idR)
         self.set_id_medicamento(id_medicamento)
         self.set_id_profissional(id_profissional)
         self.set_id_cliente(id_cliente)
         self.set_periodo(periodo)
         self.set_dosagem(dosagem)
-        self.set_validade(validade)
 
     def get_id(self): return self.__id
     def get_id_medicamento(self): return self.__id_medicamento
@@ -18,6 +17,7 @@ class Receita:
     def get_id_cliente(self): return self.__id_cliente
     def get_periodo (self): return self.__periodo
     def get_dosagem (self): return self.__dosagem
+    def get_emissao (self): return self.__emissao
     def get_validade (self): return self.__validade
 
     def set_id(self, id): self.__id = id
@@ -30,15 +30,22 @@ class Receita:
     def set_dosagem(self, dosagem): #ex. 1 gota
         if dosagem == "": raise ValueError("Nome do medicamento inválido")
         self.__dosagem = dosagem
-    def set_validade(self, validade):
-        if validade != None and validade < datetime.strptime("1/1/2025", "%d/%m/%Y"): raise ValueError("Validade inválida")
-        self.__validade = validade
+    def set_emissao(self, emissao): 
+        self.__emissao = emissao
+        self.auto_validade(emissao)
 
-    def to_df(self): return {"id": self.__id, "validade": self.__validade}
-    def to_json(self): return {"id": self.__id, "id_medicamento": self.__id_medicamento, "id_profissional": self.__id_profissional, "id_cliente": self.__id_cliente, "periodo": self.__periodo, "dosagem": self.__dosagem, "validade": self.__validade}
+    def auto_validade(self, emissao):
+        self.__validade = emissao + timedelta(days=35)
+
+
+    def to_df(self): return {"id": self.__id, "periodo": self.__periodo, "dosagem": self.__dosagem, "validade": self.__validade, "emissao": self.__emissao}
+    def to_json(self): return {"id": self.__id, "id_medicamento": self.__id_medicamento, "id_profissional": self.__id_profissional, "id_cliente": self.__id_cliente, "periodo": self.__periodo, "dosagem": self.__dosagem, "emissao": self.__emissao.strftime("%d/%m/%Y")}
     @staticmethod
-    def from_json(dic): return Receita(dic["id"], dic["id_medicamento"], dic["id_profissional"], dic["id_cliente"], dic["periodo"], dic["dosagem"], dic["validade"])
-    def __str__(self): return f"{self.__id} - {self.__periodo} - {self.__dosagem} - {self.__validade}"
+    def from_json(dic): 
+        receita = Receita(dic["id"], dic["id_medicamento"], dic["id_profissional"], dic["id_cliente"], dic["periodo"], dic["dosagem"])
+        receita.set_emissao(datetime.strptime(dic["emissao"], "%d/%m/%Y"))
+        return receita
+    def __str__(self): return f"{self.__id} - {self.__validade}"
 
 class ReceitaDAO(DAO):
     @classmethod
@@ -59,7 +66,7 @@ class ReceitaDAO(DAO):
                 for dic in list_dic:
                     obj = Receita.from_json(dic)
                     cls._objetos.append(obj)
-        except FileNotFoundError: pass
+        except FileNotFoundError or json.JSONDecodeError: pass
 
     @classmethod
     def salvar(cls):

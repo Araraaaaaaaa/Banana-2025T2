@@ -26,7 +26,7 @@ class ClienteUI:
                 if View.usuario_nunca_admin(nome):
                     st.error("Nome inválido")
                     return
-            id = op.get_id()
+            id = st.session_state["usuario_id"]
             View.cliente_atualizar(id, nome, email, fone, senha)
             st.success("Cliente atualizado com sucesso")
     
@@ -70,8 +70,17 @@ class ClienteUI:
         else:
             receita = st.selectbox("Escolha a receita", op)
             if st.button("Ver mais"):
-                st.write(receita)
-                st.write(View.medicamento_listar_id(receita.get_medicamento_id()))
+                medicamento = View.medicamento_listar_id(receita.get_id_medicamento())
                 cliente = View.cliente_listar_id(st.session_state["usuario_id"])
-                st.caption(cliente.get_nome())
-                st.caption(View.profissional_listar_id(receita.get_profissional_id()))
+                profissional = View.profissional_listar_id(receita.get_id_profissional())
+                st.markdown(f"""
+                            ### RECEITUÁRIO MÉDICO - id.{receita.get_id()}
+
+                            **👤Paciente:** {cliente.get_nome()}  
+                            **⌚Emitido em:** {receita.get_emissao().strftime("%d/%m/%Y")}    
+                            **🗓️Validade da receita:** {receita.get_validade().strftime("%d/%m/%Y")}
+                            1. {medicamento.get_nome()}
+                            > 💬 *{receita.get_periodo()}, tomar {receita.get_dosagem()} de {medicamento.get_nome()} via {medicamento.get_aplicacao()}*
+                            
+                            **⚕️Profissional:** Dr. {profissional.get_nome()}  
+                            """)

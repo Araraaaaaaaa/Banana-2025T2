@@ -18,14 +18,14 @@ class Profissional:
     def get_email(self): return self.__email
 
     def set_email(self, email): 
-        if email == "": raise ValueError("Email do profissional inválido")
+        if email == " ": raise ValueError("Email do profissional inválido")
         self.__email = email
     def set_senha(self, senha): 
-        if senha == "": raise ValueError("Senha do profissional inválida")
+        if senha == " ": raise ValueError("Senha do profissional inválida")
         self.__senha = senha
     def set_id(self, id): self.__id = id
     def set_nome(self, nome): 
-        if nome == "": raise ValueError("Nome do profissional inválido")
+        if nome == " ": raise ValueError("Nome do profissional inválido")
         self.__nome = nome
     def set_especialidade(self, espe): self.__especialidade = espe
     def set_conselho(self, conse): self.__conselho = conse

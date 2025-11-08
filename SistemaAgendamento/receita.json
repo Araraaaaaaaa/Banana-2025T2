@@ -1,1 +1,1 @@
-[{"id": 1, "id-medicamento": 4, "id-profissional": 1, "id-cliente": 6, "periodo": "4 vezes por dia", "dosagem": "duas gotas", "validade": 
+[{"id": 1, "id_medicamento": 4, "id_profissional": 1, "id_cliente": 2, "periodo": "3 vezes ao dia a cada 4 horas", "dosagem": "2 gotas", "emissao": "08/11/2025"}, {"id": 2, "id_medicamento": 6, "id_profissional": 1, "id_cliente": 2, "periodo": "Quando a sua prima chegar", "dosagem": "15 gotas", "emissao": "08/11/2025"}]

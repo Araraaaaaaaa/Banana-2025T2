@@ -32,14 +32,13 @@ class ProfissionalUI:
                 if View.usuario_nunca_admin(nome):
                     st.error("Nome inválido")
                     return
-            id = op.get_id()
+            id = st.session_state["usuario_id"]
             View.profissional_atualizar(id, nome, especialidade, conselho, email, senha)
             st.success("Profissional atualizado com sucesso")
             time.sleep(2)
             st.rerun()
 
     def abrir(): #Visão do profissional
-        se = 0
         data = st.text_input("Informe a data no formato dd/mm/aaaa", datetime.now().strftime("%d/%m/%Y"))
         horarioI = st.text_input("Informe o horário inicial no formato HH:MM")
         horarioF = st.text_input("Informe o horário final no formato HH:MM")
@@ -55,20 +54,20 @@ class ProfissionalUI:
                 st.error("Horário final inválido²")
                 return
             for i in range(200): #esta criando os vários horários
+                existe = False
                 variante = horarioI + timedelta(minutes= (i * int(intervalo)))
                 if variante >= horarioF: break
-                tutti = datetime.combine(data.date(), variante.time())
-                if tutti in View.horario_listar_id_profissional(st.session_state["usuario_id"]): pass #não pode haver horarios duplicados para um mesmo profissional
-                else:
-                    View.horario_inserir(tutti, False, None, None, st.session_state["usuario_id"])
-                    se += 1
-            if se != 0:
-                st.success("Horário(s) inserido(s) com sucesso!")
-                time.sleep(2)
-                st.rerun()
-            else:
-                st.error("Agenda já existente")
-                return
+                data = datetime.combine(data.date(), variante.time())
+                for i in View.horario_listar_id_profissional(st.session_state["usuario_id"]):
+                    if data == i.get_data(): #não pode haver horarios duplicados para um mesmo profissional
+                        existe = True
+                        break
+                if existe == False:
+                    View.horario_inserir(data, False, None, None, st.session_state["usuario_id"])
+
+            st.success("Horário(s) inserido(s) com sucesso!")
+            time.sleep(2)
+            st.rerun()
 
     def visualizar():
         horarios = View.horario_listar_id_profissional(st.session_state["usuario_id"]) #esse id tem acesso a informações do profissional.json
@@ -100,12 +99,12 @@ class ProfissionalUI:
             opC = st.selectbox("Escolha o paciente", cliente)
             periodo = st.text_input("Defina os intervalos de uso")
             dosagem = st.text_input("Defina a dosagem durante os intervalos")
-            validade = st.text_input("Defina a validade da receita")
             if st.button("Inserir"):
-                View.receita_inserir(opM.get_id(), st.session_state["usuario_id"], opC.get_id(), periodo, dosagem, validade )
+                #o mesmo profissional não poder criar receitas com a mesma validade para o mesmo cliente. 
+                View.receita_inserir(opM.get_id(), st.session_state["usuario_id"], opC.get_id(), periodo, dosagem)
                 st.success("Receita criada com sucesso")
                 time.sleep(2)
                 st.rerun()
 
-#não poder criar receitas iguais com a mesma validade. 
+
 

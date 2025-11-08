@@ -49,14 +49,17 @@ class ManterHorarioUI:
                 return 
             id_profissio = profissio.get_id()
             data = datetime.strptime(data, "%d/%m/%Y %H:%M")
-            if data in View.horario_listar_id_profissional(id_profissio): #não pode haver horarios duplicados para um mesmo profissional
-                st.error("Profissional com horário já existente")
-                return
+            for i in View.horario_listar_id_profissional(id_profissio):
+                if data == i.get_data(): #não pode haver horarios duplicados para um mesmo profissional
+                    st.error("Profissional com horário já cadastrado")
+                    return
             id_cliente = cliente.get_id() if cliente else None
             id_servico = servico.get_id() if servico else None
             
             View.horario_inserir(data, confirmado, id_cliente, id_servico, id_profissio)
             st.success("Horário inserido com sucesso")
+            time.sleep(2)
+            st.rerun()
 
     def atualizar():
         horarios = View.horario_listar()
@@ -93,6 +96,7 @@ class ManterHorarioUI:
                         return
                 View.horario_atualizar(op.get_id(), datetime.strptime(data,"%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissio)
                 st.success("Horário atualizado com sucesso")
+                time.sleep(2)
                 st.rerun()
 
     def excluir():

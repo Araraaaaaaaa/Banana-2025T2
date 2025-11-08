@@ -43,6 +43,8 @@ class ManterServicosUI:#servico já existente, valor positivo não nulo
                 id = op.get_id()
                 View.servico_atualizar(id, Descricao, Valor)
                 st.success("Serviço atualizado com sucesso")
+                time.sleep(2)
+                st.rerun()
 
     def excluir():
         servicos = View.servico_listar()
@@ -53,3 +55,5 @@ class ManterServicosUI:#servico já existente, valor positivo não nulo
                 id = op.get_id()
                 View.servico_excluir(id)
                 st.success("Serviço excluído com sucesso")
+                time.sleep(2)
+                st.rerun()

@@ -9,9 +9,12 @@ from datetime import datetime
 class View:
 
     def cliente_criar_admin():
-        for c in View.cliente_listar():
+        list = View.cliente_listar()
+        for c in list:
             if c.get_email() == "admin": return
+            if c.get_nome() == "admin": return
         View.cliente_inserir("admin", "admin", "fone", "1234")
+
     def usuario_nunca_admin(testando):
         admins = ["admin", "admin1"]
         return testando.lower() in admins
@@ -156,10 +159,10 @@ class View:
         return ReceitaDAO.listar_id(id)
     def receita_listar_id_cliente(id): #ver as receitas de cada cliente
         return ReceitaDAO.listar_id_cliente(id)
-    def receita_inserir(id_medicamento, id_profissional, id_cliente, periodo, dosagem, validade):
+    def receita_inserir(id_medicamento, id_profissional, id_cliente, periodo, dosagem):
         try:
-            validade = datetime.strptime(validade, "%d/%m/%Y")
-            receita = Receita(0, id_medicamento, id_profissional, id_cliente, periodo, dosagem, validade)
+            receita = Receita(0, id_medicamento, id_profissional, id_cliente, periodo, dosagem)
+            receita.set_emissao(datetime.now())
             ReceitaDAO.inserir(receita)
         except ValueError: return
 
@@ -185,5 +188,5 @@ class View:
             MedicamentoDAO.inserir(medicamento)
         except ValueError: return
 
-        #resolver para não aparecer os horários no passado. não pode confirmar um horário passadoou poder ver na aplicação
-        #não resolvido o problema dos horários duplicados
+        #- não aparecer os horários no passado. não pode confirmar um horário passadoou poder ver na aplicação
+        #resolvido o problema dos horários duplicados

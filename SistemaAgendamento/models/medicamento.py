@@ -24,7 +24,7 @@ class Medicamento:
         if aplicacao == "": raise ValueError("Aplicação do medicamento inválida")
         self.__aplicacao = aplicacao
 
-    def to_df(self): return {"nome": self.__nome, "aplicacao": self.__aplicacao, "objetivo": self.__objetivo}
+    def to_df(self): return {"id": self.__id, "nome": self.__nome, "aplicacao": self.__aplicacao, "objetivo": self.__objetivo}
     def to_json(self): return {"id": self.__id, "nome": self.__nome, "objetivo": self.__objetivo, "aplicacao": self.__aplicacao,}
     @staticmethod
     def from_json(dic): return Medicamento(dic["id"], dic["nome"], dic["objetivo"], dic["aplicacao"])
