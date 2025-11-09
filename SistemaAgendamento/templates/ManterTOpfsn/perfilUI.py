@@ -6,7 +6,7 @@ import time
 
 class ProfissionalUI:
     def main():
-        st.title("Painel Profissional")
+        st.title(f"Painel Profissional {st.session_state["usuario_id"]}")
         tab1, tab2, tab3, tab4, tab5 = st.tabs(["Perfil", "Abrir Agenda", "Ver Serviços", "Confirmar Serviço", "Criar Receita"])
         with tab1: ProfissionalUI.perfil()
         with tab2: ProfissionalUI.abrir()
@@ -82,8 +82,28 @@ class ProfissionalUI:
         horarios = View.horario_listar_id_profissional(st.session_state["usuario_id"]) #confirma apenas os horários dele
         if len(horarios) == 0: st.write("Nenhum horário cadastrado")
         else:
+            #deixar a visualização mais bonita com o markdowm
             op = st.selectbox("Informe o Horário", horarios) #str(horarios)
+
+            cliente = View.cliente_listar_id(op.get_id_cliente())
+            C_nome = cliente.get_nome() if cliente != None else "Vazio"
+
+            servico = View.servico_listar_id(op.get_id_servico())
+            S_descricao = servico.get_descricao() if servico != None else "Vazio"
+
+            confirmado_str = "Confirmado" if op.get_confirmado() else "N/Confirmado"
+
+            st.markdown(f"""### HORÁRIO - {confirmado_str}
+**👤Paciente:** ........{C_nome}
+**🧩Serviço:**  ........{S_descricao}   
+**⌚Horário:**  ........{op.get_data().strftime("%d/%m/%Y %H:%M")}""")
             if st.button("Corfirmar"):
+                if C_nome == "Vazio" or S_descricao == "Vazio": 
+                    st.error("Horário sem paciente ou sem serviço")
+                    return
+                if confirmado_str == "Confirmado":
+                    st.error("Horário já foi confirmado")
+                    return
                 View.horario_atualizar(op.get_id(), op.get_data(), True, op.get_id_cliente(), op.get_id_servico(), op.get_id_profissional())
                 st.success("Horário confirmado com sucesso")
                 time.sleep(2)
@@ -101,6 +121,13 @@ class ProfissionalUI:
             dosagem = st.text_input("Defina a dosagem durante os intervalos")
             if st.button("Inserir"):
                 #o mesmo profissional não poder criar receitas com a mesma validade para o mesmo cliente. 
+                for i in View.receita_listar_id_cliente(opC.get_id()):
+                    if i.get_id() == st.session_state["usuario_id"]: #verifica se o profissional tem outra receita para o cliente
+                        if i.get_id_medicamento() == opM.get_id(): #verifica se o medicamento receitado foi o mesmo
+                            margem = datetime.now() + timedelta(minutes= 30) #margem de erro
+                            if i.get_emissao() < margem: #verifica se ele foi emitido a pelo menos 2 horas
+                                st.error("Receita já existe")
+                                return
                 View.receita_inserir(opM.get_id(), st.session_state["usuario_id"], opC.get_id(), periodo, dosagem)
                 st.success("Receita criada com sucesso")
                 time.sleep(2)

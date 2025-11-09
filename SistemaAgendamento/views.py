@@ -11,8 +11,7 @@ class View:
     def cliente_criar_admin():
         list = View.cliente_listar()
         for c in list:
-            if c.get_email() == "admin": return
-            if c.get_nome() == "admin": return
+            if c.get_email() == "admin" and c.get_nome() == "admin": return
         View.cliente_inserir("admin", "admin", "fone", "1234")
 
     def usuario_nunca_admin(testando):
@@ -188,5 +187,4 @@ class View:
             MedicamentoDAO.inserir(medicamento)
         except ValueError: return
 
-        #- não aparecer os horários no passado. não pode confirmar um horário passadoou poder ver na aplicação
-        #resolvido o problema dos horários duplicados
+View.cliente_criar_admin() # verifica se existe o usuário admin

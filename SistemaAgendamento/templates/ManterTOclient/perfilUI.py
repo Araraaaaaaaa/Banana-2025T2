@@ -5,7 +5,7 @@ import time
 
 class ClienteUI:
     def main():
-        st.title("Painel Cliente")
+        st.title(f"Painel Cliente {st.session_state["usuario_id"]}")
         tab1, tab2, tab3, tab4 = st.tabs(["Perfil", "Agendar Serviço", "Ver Serviços", "Ver Receitas"])
         with tab1: ClienteUI.perfil()
         with tab2: ClienteUI.agendar()
@@ -29,6 +29,8 @@ class ClienteUI:
             id = st.session_state["usuario_id"]
             View.cliente_atualizar(id, nome, email, fone, senha)
             st.success("Cliente atualizado com sucesso")
+            time.sleep(2)
+            st.rerun()
     
     def agendar():
         profs = View.profissional_listar()
@@ -44,6 +46,9 @@ class ClienteUI:
                     horario = st.selectbox("Informe o horário", horarios)
                     servico = st.selectbox("Informe o serviço", servicos)
                     if st.button("Agendar"):
+                        if horario.get_id_cliente() != None or horario.get_id_cliente() != 0:
+                            st.error("Horário com agendamento")
+                            return
                         View.horario_atualizar(horario.get_id(), horario.get_data(), False, st.session_state["usuario_id"],servico.get_id(), profissional.get_id())
                         st.success("Horário agendado com sucesso")
                         time.sleep(2)
@@ -62,25 +67,25 @@ class ClienteUI:
                 dic.append({"data" : obj.get_data(),"confirmado" : obj.get_confirmado(), "serviço" : servico, "profissional" : profissio})
             df = pd.DataFrame(dic)
             st.dataframe(df)
-            st.rerun()
 
     def receitas():
         op = View.receita_listar_id_cliente(st.session_state["usuario_id"])
-        if len(op) == 0: st.write("Sem receitas válidas")
+        if len(op) == 0 or op == None: st.write("Sem receitas válidas")
         else:
             receita = st.selectbox("Escolha a receita", op)
             if st.button("Ver mais"):
                 medicamento = View.medicamento_listar_id(receita.get_id_medicamento())
                 cliente = View.cliente_listar_id(st.session_state["usuario_id"])
                 profissional = View.profissional_listar_id(receita.get_id_profissional())
-                st.markdown(f"""
-                            ### RECEITUÁRIO MÉDICO - id.{receita.get_id()}
+                st.markdown(f"""### RECEITUÁRIO MÉDICO - id.{receita.get_id()}
 
-                            **👤Paciente:** {cliente.get_nome()}  
-                            **⌚Emitido em:** {receita.get_emissao().strftime("%d/%m/%Y")}    
-                            **🗓️Validade da receita:** {receita.get_validade().strftime("%d/%m/%Y")}
-                            1. {medicamento.get_nome()}
-                            > 💬 *{receita.get_periodo()}, tomar {receita.get_dosagem()} de {medicamento.get_nome()} via {medicamento.get_aplicacao()}*
-                            
-                            **⚕️Profissional:** Dr. {profissional.get_nome()}  
-                            """)
+**👤Paciente:** {cliente.get_nome()}  
+**⌚Emitido em:** {receita.get_emissao().strftime("%d/%m/%Y")}    
+**🗓️Validade da receita:** {receita.get_validade().strftime("%d/%m/%Y")}
+
+
+1. {medicamento.get_nome()}
+>  *{receita.get_periodo()}, tomar {receita.get_dosagem()} de {medicamento.get_nome()} via {medicamento.get_aplicacao()}*
+
+
+**⚕️Profissional:** Dr. {profissional.get_nome()}  """)

@@ -40,7 +40,7 @@ class Horario:
         horario.set_id_profissional(dic["id_profissional"])
         return horario
 
-    def __str__(self): return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - {self.__confirmado}"
+    def __str__(self): return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - {self.__confirmado} - {self.__id_cliente}"
 
 class HorarioDAO(DAO):
     @classmethod

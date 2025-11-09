@@ -16,6 +16,16 @@ import streamlit as st
 
 class IndexUI:
 
+    def menu_visitante():
+        op = st.sidebar.selectbox("Menu", ["Entrar no Sistema", "Abrir Conta"])
+        View.cliente_criar_admin()
+        if op == "Entrar no Sistema": LoginUI.main()
+        if op == "Abrir Conta": AbrirContaUI.main()
+
+    def menu_cliente(): ClienteUI.main()
+
+    def menu_profissional(): ProfissionalUI.main()
+
     def menu_admin():            
         op = st.sidebar.selectbox("Menu", ["Cadastro de Clientes", "Cadastro de Serviços", "Cadastro de Horários", "Cadastro de Profissionais", "Cadastro de Medicamentos"])
         if op == "Cadastro de Profissionais": ManterProfissionalUI.main()
@@ -23,19 +33,6 @@ class IndexUI:
         if op == "Cadastro de Serviços": ManterServicosUI.main()
         if op == "Cadastro de Horários": ManterHorarioUI.main()
         if op == "Cadastro de Medicamentos": ManterMedicamentosUI.main()
-
-    def menu_visitante():
-        op = st.sidebar.selectbox("Menu", ["Entrar no Sistema", "Abrir Conta"])
-        if op == "Entrar no Sistema": LoginUI.main()
-        if op == "Abrir Conta": AbrirContaUI.main()
-
-    def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"]) 
-        if op == "Meus Dados": ClienteUI.main()
-
-    def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"])
-        if op == "Meus Dados": ProfissionalUI.main()
 
     def sidebar():
         if "usuario_id" not in st.session_state:
@@ -53,10 +50,6 @@ class IndexUI:
             elif profi: IndexUI.menu_profissional()
             elif cliente: IndexUI.menu_cliente()
             IndexUI.sair_do_sistema()
-
-    def main():
-        View.cliente_criar_admin() # verifica se existe o usuário admin
-        IndexUI.sidebar() # monta o sidebar
     
     def sair_do_sistema():
         if st.sidebar.button("Sair"):
@@ -65,4 +58,4 @@ class IndexUI:
             del st.session_state["usuario_tipo"]
             st.rerun()
 
-IndexUI.main()
+IndexUI.sidebar()
