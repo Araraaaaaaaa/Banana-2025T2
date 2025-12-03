@@ -1,4 +1,4 @@
-from models.DAO import DAO
+#from models.DAO import DAO
 import json
 
 class Cliente:
@@ -36,7 +36,7 @@ class Cliente:
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__email} – {self.__fone}"
 
 
-class ClienteDAO(DAO): 
+'''class ClienteDAO(DAO): 
     @classmethod
     def abrir(cls):
         cls._objetos = []
@@ -51,4 +51,4 @@ class ClienteDAO(DAO):
     @classmethod
     def salvar(cls):
         with open("clientes.json", mode="w") as arquivo:
-            json.dump(cls._objetos, arquivo, default = Cliente.to_json)
+            json.dump(cls._objetos, arquivo, default = Cliente.to_json)'''

@@ -13,7 +13,9 @@ from templates.ManterTOclient.perfilUI import ClienteUI
 from templates.loginUI import LoginUI
 from views import View
 import streamlit as st
-
+#bug na hora de agendar um horário - lado cliente
+#falta de trys - UI
+#horários no passado aparecendo
 class IndexUI:
 
     def menu_visitante():
